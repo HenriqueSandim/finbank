@@ -7,7 +7,7 @@
   "author": "Jalles <jallessantos12@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev node_modules src/server.ts",
+    "dev": "ts-node-dev --ignore-watch node_modules src/server.ts",
     "build": "tsc",
     "typeorm": "typeorm-ts-node-commonjs",
     "test": "cross-env NODE_ENV=test SECRET_KEY=chavesecreta! jest --verbose --runInBand",
