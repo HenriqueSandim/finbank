@@ -1,4 +1,5 @@
-import { hashSync } from "bcrypt";
+
+import { hashSync } from "bcryptjs";
 import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import Account from "./account.entity";
 
