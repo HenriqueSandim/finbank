@@ -1,3 +1,3 @@
-const userUpdateService = async (payload) => {};
+const userUpdateService = async (payload, userId: string) => {};
 
 export default userUpdateService;
