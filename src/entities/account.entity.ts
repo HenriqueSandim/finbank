@@ -1,21 +1,27 @@
-import { Column, Entity, OneToMany, OneToOne, PrimaryColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import Transference from "./transference.entity";
 import User from "./user.entity";
 
-
 @Entity("accounts")
 class Account {
-    @PrimaryColumn({ type: "int", width: 5 })
-    id: number
+  @PrimaryGeneratedColumn({ type: "int" })
+  id: number;
 
-    @Column({ type: "decimal", precision: 30, scale: 2, default: 0 })
-    money: number
-    
-    @OneToOne(() => User, (users) => users.id )
-    user: string
+  @Column({ type: "decimal", precision: 30, scale: 2, default: 0 })
+  money: number;
 
-    @OneToMany(() => Transference, (transference) => transference.account)
-    transference: Transference[]
+  @OneToOne(() => User)
+  user: User;
+
+  @OneToMany(() => Transference, (transference) => transference.account)
+  transference: Transference[];
 }
 
-export default Account
+export default Account;
