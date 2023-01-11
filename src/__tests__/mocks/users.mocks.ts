@@ -1,4 +1,6 @@
-const mockedUserRequest = {
+import { IUserRequest } from "../../interfaces/users.interfaces"
+
+const mockedUserRequest: IUserRequest = {
     name: "testinho",
     email: "testinho@mail.com",
     password: "Tt123!@#",
@@ -11,7 +13,7 @@ const mockedUserLogin = {
     password: "Tt123!@#"
 }
 
-const mockedUserWrongCPF = {
+const mockedUserWrongCPF: IUserRequest = {
     name: "testinho2",
     email: "testinho2@mail.com",
     password: "Tt123!@#",
