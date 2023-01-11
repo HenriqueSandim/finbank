@@ -32,6 +32,9 @@ class User {
     @Column({ default: true })
     isActive: boolean
 
+    @Column({ default: false })
+    isAdmin: boolean
+
     @CreateDateColumn()
     createdAt: Date
 
