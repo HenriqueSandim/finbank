@@ -3,7 +3,7 @@ import { SchemaOf } from "yup";
 import validator from "cpf-cnpj-validator";
 const Joi = require("@hapi/joi").extend(validator);
 import { IUserRequest, IUserResponse } from "../interfaces/users.interfaces";
-import { IAccountResponse } from "../interfaces/balance.interfaces";
+import { accountSchema } from "./balance.serializers";
 
 const cpfSchema = Joi.document().cpf();
 
@@ -40,11 +40,6 @@ export const createUserSchema: SchemaOf<IUserRequest> = yup.object().shape({
   }),
 });
 
-const accountSchema: SchemaOf<IAccountResponse> = yup.object().shape({
-  id: yup.number().required(),
-  money: yup.number().required(),
-});
-
 export const returnUserSchema: SchemaOf<IUserResponse> = yup.object().shape({
   id: yup.string().required(),
   name: yup.string().required(),
@@ -54,5 +49,5 @@ export const returnUserSchema: SchemaOf<IUserResponse> = yup.object().shape({
   isAdmin: yup.boolean(),
   createdAt: yup.date().required(),
   updatedAt: yup.date().required(),
-  accountId: accountSchema.required(),
+  account: accountSchema.required(),
 });

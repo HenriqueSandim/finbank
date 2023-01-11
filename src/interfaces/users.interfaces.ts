@@ -23,4 +23,5 @@ export interface IUserResponse {
   isAdmin: boolean;
   createdAt: Date;
   updatedAt: Date;
+  account: IAccountResponse;
 }
