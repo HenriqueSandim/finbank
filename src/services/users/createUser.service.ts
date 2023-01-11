@@ -2,7 +2,7 @@ import AppDataSource from "../../data-source";
 import Account from "../../entities/account.entity";
 import User from "../../entities/user.entity";
 import AppError from "../../errors/AppError";
-import { IUserRequest, IUserReturn } from "../../interfaces/users.interfaces";
+import { IUserRequest, IUserResponse } from "../../interfaces/users.interfaces";
 import { returnUserSchema } from "../../serializers/users.serializers";
 
 const createUserService = async (body: IUserRequest): Promise<any> => {
