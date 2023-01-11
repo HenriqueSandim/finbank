@@ -10,7 +10,7 @@ const loginUserService = async (data: ILoginRequest): Promise<string> => {
   const user = await AppDataSource.createQueryBuilder()
     .select(["users.id", "users.password", "users.isAdmin", "users.account"])
     .from(User, "users")
-    .where('email = :email OR "CPF" = :cpf', {
+    .where("email = :email OR 'CPF' = :cpf", {
       email: data.email,
       cpf: data.cpf,
     })
