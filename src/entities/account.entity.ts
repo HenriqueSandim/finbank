@@ -8,7 +8,7 @@ class Account {
     @PrimaryColumn({ type: "int", width: 5 })
     id: number
 
-    @Column({ type: "decimal", precision: 30, scale: 2 })
+    @Column({ type: "decimal", precision: 30, scale: 2, default: 0 })
     money: number
     
     @OneToOne(() => User, (users) => users.id )

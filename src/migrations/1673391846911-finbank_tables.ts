@@ -15,6 +15,7 @@ export class finbankTables1673391846911 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "finances" ADD CONSTRAINT "FK_2a97e4910ff8c90cd7910d569df" FOREIGN KEY ("accountId") REFERENCES "accounts"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "finances_categories" ADD CONSTRAINT "FK_953949cea46a566e1a10f62a604" FOREIGN KEY ("categoryId") REFERENCES "category"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "finances_categories" ADD CONSTRAINT "FK_a49b82f5fc916396809bbc7d3f9" FOREIGN KEY ("financeId") REFERENCES "finances"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`INSERT INTO "category" VALUE ('Compras'), ('Energia'), ('Água'), ('Internet'), ('Boletos'), ('Lazer'), ('Gasto Mensal')`)
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
