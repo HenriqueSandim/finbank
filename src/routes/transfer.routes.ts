@@ -1,5 +1,14 @@
 import { Router } from "express";
+import createTransferController from "../controllers/transfer/createTransfer.controller";
+import schemaValidate from "../middlewares/schemaValidate.middleware";
+import { transferSchemaReq } from "../serializers/transfer.serializers";
 
-const tranferRoutes = Router();
+const transferRoutes = Router();
 
-export default tranferRoutes;
+transferRoutes.post(
+    "/:id",
+    schemaValidate(transferSchemaReq),
+    createTransferController
+);
+
+export default transferRoutes;

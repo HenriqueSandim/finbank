@@ -7,7 +7,7 @@ class Transference {
     id: string
 
     @Column()
-    description: string
+    description: string     
 
     @Column({ type: "date" })
     date: string
