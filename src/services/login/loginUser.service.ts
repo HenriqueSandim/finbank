@@ -8,7 +8,13 @@ import "dotenv/config";
 
 const loginUserService = async (data: ILoginRequest): Promise<string> => {
   const user = await AppDataSource.createQueryBuilder()
-    .select(["users.id", "users.password", "users.isAdmin", "users.account"])
+    .select([
+      "users.id",
+      "users.password",
+      "users.isAdmin",
+      "users.account",
+      "users.isActive",
+    ])
     .from(User, "users")
     .where('email = :email OR "CPF" = :cpf', {
       email: data.email,
@@ -17,6 +23,10 @@ const loginUserService = async (data: ILoginRequest): Promise<string> => {
     .getOne();
 
   if (!user) {
+    throw new AppError("Incorrect user", 403);
+  }
+
+  if (!user.isActive) {
     throw new AppError("Incorrect user", 403);
   }
 

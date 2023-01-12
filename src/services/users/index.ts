@@ -1,4 +1,5 @@
-import userUpdateService from "./userUpdate.service";
+import updateUserService from "./updateUser.service";
 import createUserService from "./createUser.service";
+import deleteUserService from "./deleteUser.service";
 
-export { createUserService, userUpdateService };
+export { createUserService, deleteUserService, updateUserService };
