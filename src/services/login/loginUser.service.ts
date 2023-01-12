@@ -7,20 +7,12 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
 
 const loginUserService = async (data: ILoginRequest): Promise<string> => {
-  const user = await AppDataSource.createQueryBuilder()
-    .select([
-      "users.id",
-      "users.password",
-      "users.isAdmin",
-      "users.account",
-      "users.isActive",
-    ])
-    .from(User, "users")
-    .where('email = :email OR "CPF" = :cpf', {
-      email: data.email,
-      cpf: data.cpf,
-    })
-    .getOne();
+  const user = await AppDataSource.getRepository(User).findOne({
+    where: [{ email: data.email }, { CPF: data.cpf }],
+    relations: {
+      account: true,
+    },
+  });
 
   if (!user) {
     throw new AppError("Incorrect user", 403);
@@ -38,7 +30,7 @@ const loginUserService = async (data: ILoginRequest): Promise<string> => {
 
   const token = jwt.sign(
     {
-      account: user.account,
+      account: user.account.id,
       adm: user.isAdmin,
     },
     process.env.SECRET_KEY,
