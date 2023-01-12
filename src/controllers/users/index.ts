@@ -1,4 +1,4 @@
-import createUserControler from "./createUser.controller";
+import createUserController from "./createUser.controller";
 import deleteUserController from "./deleteUser.controller";
 
-export { createUserControler, deleteUserController };
+export { createUserController, deleteUserController };

@@ -1,4 +1,4 @@
 import ensureAuthMiddleware from "./ensureAuth.middleware";
-import isAdminOrOwnerMiddleware from "./isAdminOrOwner.middleware";
+import ensureAdmOwnerAuthMiddleware from "./ensureAdmOwnerAuth.middleware";
 
-export { ensureAuthMiddleware, isAdminOrOwnerMiddleware };
+export { ensureAuthMiddleware, ensureAdmOwnerAuthMiddleware };
