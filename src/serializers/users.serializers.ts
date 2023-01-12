@@ -36,7 +36,6 @@ export const createUserSchema: SchemaOf<IUserRequest> = yup.object().shape({
     .required(),
   CPF: yup.string().test("isValidCpf", "CPF number is not valid", (CPF) => {
     return !cpfSchema.validate(CPF).error;
-    //return true;
   }),
 });
 
@@ -44,10 +43,10 @@ export const returnUserSchema: SchemaOf<IUserResponse> = yup.object().shape({
   id: yup.string().required(),
   name: yup.string().required(),
   email: yup.string().required(),
-  birthdate: yup.date().required(),
+  birthdate: yup.string().required(),
   isActive: yup.boolean().required(),
   isAdmin: yup.boolean(),
-  createdAt: yup.date().required(),
-  updatedAt: yup.date().required(),
+  createdAt: yup.string().required(),
+  updatedAt: yup.string().required(),
   account: accountSchema.required(),
 });
