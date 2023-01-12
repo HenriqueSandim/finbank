@@ -19,6 +19,7 @@ const ensureUserExistsMiddleware = async (req: Request, res: Response, next: Nex
     where: {
       id: id,
     },
+    withDeleted: true,
   });
 
   if (!exists) {

@@ -13,6 +13,7 @@ const listUserService = async (userId: string): Promise<IUserResponse> => {
     relations: {
       account: true,
     },
+    withDeleted: true,
   });
 
   const userResponse = await returnUserSchema.validate(user, {
