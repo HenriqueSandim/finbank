@@ -1,13 +1,15 @@
-export interface iTransferRequest {
+import Account from "../entities/account.entity";
+
+export interface ITransferRequest {
     description: string;
     value: number;
 }
 
-export interface iTransferResponse {
+export interface ITransferResponse {
     id: string;
     description: string;
     date: Date;
     value: number;
-    senderId: string;
-    receivedId: string;
+    receiverAccountId: number,
+    senderAccount: Account
 }

@@ -1,31 +1,40 @@
 import AppDataSource from "../../data-source";
+import Account from "../../entities/account.entity";
 import Transference from "../../entities/transference.entity";
-import User from "../../entities/user.entity";
-import { iTransferRequest } from "../../interfaces/transfer.interfaces";
+import AppError from "../../errors/AppError";
+import { ITransferRequest } from "../../interfaces/transfer.interfaces";
 
 const createTransferService = async (
-    DataTransfer: iTransferRequest,
-    // userId: string,
-    receivedId: string
+    dataTransfer: ITransferRequest,
+    senderAccountId: number,
+    receivedAccountId: number
 ) => {
     const transferRepo = AppDataSource.getRepository(Transference);
-    const usersRepo = AppDataSource.getRepository(User);
+    const accountRepo = AppDataSource.getRepository(Account);
 
-    // const newTransfer = transferRepo.save({
-    //     ...DataTransfer,
-    //     date: new Date() + "",
-    //     receivedId: receivedId,
-    //     senderId: "asd192ii9oik9i",
-    // });
-
-    console.log({
-        ...DataTransfer,
-        date: new Date() + "",
-        receivedId: receivedId,
-        senderId: "asd192ii9oik9i",
+    const receiverAccount = await accountRepo.findOneBy({
+        id: receivedAccountId,
     });
 
-    return {...DataTransfer, date: new Date() + '',  receivedId: receivedId, senderId: 'asd192ii9oik9i'}
+    if (!receiverAccount) {
+        throw new AppError("account not found", 404);
+    }
+
+    const senderAccount = await accountRepo.findOneBy({ id: senderAccountId });
+
+    if (senderAccount.money < dataTransfer.value) {
+        throw new AppError("insufficient money", 401);
+    }
+
+    const newTransfer = transferRepo.create({
+        ...dataTransfer,
+        date: new Date() + "",
+        receiverAccountId: receivedAccountId,
+        senderAccount: senderAccount,
+    });
+    await transferRepo.save(newTransfer);
+
+    return newTransfer;
 };
 
 export default createTransferService;

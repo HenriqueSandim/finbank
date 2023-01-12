@@ -15,8 +15,11 @@ class Transference {
     @Column({ type: "decimal", precision: 30, scale: 2 })
     value: number
 
+    @Column()
+    receiverAccountId: number 
+
     @ManyToOne(() => Account, (account) => account.transference)
-    account: Account
+    senderAccount: Account 
 }
 
 export default Transference
