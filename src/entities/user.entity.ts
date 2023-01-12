@@ -1,52 +1,62 @@
-
 import { hashSync } from "bcryptjs";
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import Account from "./account.entity";
 
 @Entity("users")
 class User {
-    @PrimaryGeneratedColumn("uuid")
-    id: string
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
-    @Column({ length: 150 })
-    name: string
+  @Column({ length: 150 })
+  name: string;
 
-    @Column({ unique: true })
-    email: string
+  @Column({ unique: true })
+  email: string;
 
-    @Column()
-    password: string
+  @Column()
+  password: string;
 
-    @BeforeInsert()
-    @BeforeUpdate()
-    encryptPassword() {
-        this.password = hashSync(this.password, 10)
-    }
+  @BeforeInsert()
+  @BeforeUpdate()
+  encryptPassword() {
+    this.password = hashSync(this.password, 10);
+  }
 
-    @Column({ type: "date" })
-    birthdate: string
+  @Column({ type: "date" })
+  birthdate: string;
 
-    @Column({ unique: true })
-    CPF: string
+  @Column({ unique: true })
+  CPF: string;
 
-    @Column({ default: true })
-    isActive: boolean
+  @Column({ default: true })
+  isActive: boolean;
 
-    @Column({ default: false })
-    isAdmin: boolean
+  @Column({ default: false })
+  isAdmin: boolean;
 
-    @CreateDateColumn()
-    createdAt: Date
+  @CreateDateColumn()
+  createdAt: Date;
 
-    @UpdateDateColumn()
-    updatedAt: Date
+  @UpdateDateColumn()
+  updatedAt: Date;
 
-    @DeleteDateColumn({ default: null })
-    deletedAt: Date
+  @DeleteDateColumn({ default: null })
+  deletedAt: Date;
 
-    @OneToOne(() => Account, (accounts) => accounts.id)
-    @JoinColumn()
-    account: number
+  @OneToOne(() => Account)
+  @JoinColumn()
+  account: Account;
 }
 
-export default User
+export default User;
