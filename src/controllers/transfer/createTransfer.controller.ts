@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ITransferRequest } from "../../interfaces/transfer.interfaces";
-import createTransferService from "../../services/transfer/createTransfer.service";
+import { createTransferService } from "../../services/transfer";
 
 const createTransferController = async (req: Request, res: Response) => {
     const dataTransfer: ITransferRequest = req.body;
