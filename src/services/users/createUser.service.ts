@@ -5,7 +5,7 @@ import AppError from "../../errors/AppError";
 import { IUserRequest, IUserResponse } from "../../interfaces/users.interfaces";
 import { returnUserSchema } from "../../serializers/users.serializers";
 
-const createUserService = async (body: IUserRequest): Promise<any> => {
+const createUserService = async (body: IUserRequest): Promise<IUserResponse> => {
   const userRepo = AppDataSource.getRepository(User);
 
   const foundEmail = await userRepo.find({

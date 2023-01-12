@@ -1,15 +1,16 @@
 import Account from "../entities/account.entity";
 
 export interface ITransferRequest {
-    description: string;
-    value: number;
+  description: string;
+  value: number;
+  date?: string;
 }
 
 export interface ITransferResponse {
-    id: string;
-    description: string;
-    date: Date;
-    value: number;
-    receiverAccountId: number,
-    senderAccount: Account
+  id: string;
+  description: string;
+  date: Date;
+  value: number;
+  receiverAccountId: number;
+  senderAccount: Account;
 }
