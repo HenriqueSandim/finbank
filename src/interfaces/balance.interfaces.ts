@@ -1,4 +1,8 @@
 export interface IAccountResponse {
   id: number;
-  money: string;
+  money: number;
+}
+
+export interface IBalanceResponse {
+  money: number;
 }

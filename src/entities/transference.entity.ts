@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import Account from "./account.entity";
 
 @Entity("transferences")
@@ -18,8 +18,9 @@ class Transference {
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
-  receiverAccountId: number;
+  @ManyToOne(() => Account, (account) => account.id)
+  @JoinColumn()
+  receiverAccount: number;
 
   @ManyToOne(() => Account, (account) => account.transference)
   senderAccount: Account;
