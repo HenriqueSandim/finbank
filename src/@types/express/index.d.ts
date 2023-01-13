@@ -7,7 +7,7 @@ declare global {
       user: {
         id: string;
         adm: boolean;
-        account: string;
+        account: number;
       };
     }
   }

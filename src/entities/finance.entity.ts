@@ -1,11 +1,4 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import Account from "./account.entity";
 import Finances_categories from "./finance_category.entity";
 
@@ -29,11 +22,7 @@ class Finance {
   @ManyToOne(() => Account, (account) => account.id)
   account: Account;
 
-  @OneToMany(
-    () => Finances_categories,
-    (finance_category) => finance_category.finance,
-    { eager: true }
-  )
+  @OneToMany(() => Finances_categories, (finance_category) => finance_category.finance, { eager: true })
   financesCategory: Finances_categories[];
 
   @CreateDateColumn()

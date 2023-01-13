@@ -1,18 +1,12 @@
 import AppDataSource from "../../data-source";
 import Account from "../../entities/account.entity";
+import Category from "../../entities/category.entity";
 import Finance from "../../entities/finance.entity";
 import Finances_categories from "../../entities/finance_category.entity";
 import User from "../../entities/user.entity";
-import {
-  IFinanceRequest,
-  IFinanceResponse,
-} from "../../interfaces/finances.interfaces";
-import { IUser } from "../../interfaces/users.interfaces";
+import { IFinanceRequest } from "../../interfaces/finances.interfaces";
 
-const createFinanceService = async (
-  body: IFinanceRequest,
-  userId: string
-): Promise<IFinanceResponse> => {
+const createFinanceService = async (body: IFinanceRequest, userId: string): Promise<Finance> => {
   //Repositório do Usuário
   const userRepo = AppDataSource.getRepository(User);
   const foundUser = await userRepo.findOne({
@@ -20,24 +14,16 @@ const createFinanceService = async (
     relations: { account: true },
   });
 
-  //Repositório de Contas
-  const accountRepo = AppDataSource.getRepository(Account);
-  const accountFound = await accountRepo.findOne({
-    where: { id: foundUser.account.id },
-  });
-
   //Alterar o valor da conta
-  let newValue = 0;
   if (body.isIncome) {
-    newValue = Number(accountFound.money) + body.value;
+    foundUser.account.money = Number(foundUser.account.money) + body.value;
   } else {
-    newValue = Number(accountFound.money) - body.value;
+    foundUser.account.money = Number(foundUser.account.money) - body.value;
   }
 
-  await accountRepo.save({
-    id: accountFound.id,
-    money: newValue,
-  });
+  //Repositório de account
+  const accountRepo = AppDataSource.getRepository(Account);
+  await accountRepo.save(foundUser.account);
 
   //Repositório de finanças
   const financeRepo = AppDataSource.getRepository(Finance);
@@ -45,21 +31,30 @@ const createFinanceService = async (
     value: body.value,
     description: body.description,
     isIncome: body.isIncome,
-    account: accountFound,
+    account: foundUser.account,
   });
   await financeRepo.save(newFinance);
+
+  //Repositório de categorias
+  const categoriesRepo = AppDataSource.getRepository(Category);
+  const categoriesName = body.category.map((cat) => cat.name);
+  const categoriesId = body.category.map((cat) => cat.id);
+
+  const findedCategories = await categoriesRepo
+    .createQueryBuilder("category")
+    .where("category.name IN (:...name) OR category.id IN (:...id)", { name: categoriesName, id: categoriesId })
+    .getMany();
+
   //Repositório de finanças_categorias
-
   const finCatRepo = AppDataSource.getRepository(Finances_categories);
-
-  let newFinCat = {};
-  const finCats: any = body.category.map((cat) => {
-    newFinCat = finCatRepo.create({
+  const finCats: Finances_categories[] = findedCategories.map((cat) => {
+    const newFinCat = finCatRepo.create({
       finance: newFinance,
       category: cat,
     });
     return newFinCat;
   });
+
   await finCatRepo.save(finCats);
 
   const financeReturn = await financeRepo.findOne({
@@ -67,13 +62,7 @@ const createFinanceService = async (
     relations: { financesCategory: true },
   });
 
-  const { financesCategory, ...rest } = financeReturn as any;
-
-  const categoriesList = financeReturn.financesCategory.map((fin) => {
-    return fin.category;
-  });
-
-  return { ...rest, categoriesList };
+  return financeReturn;
 };
 
 export default createFinanceService;
