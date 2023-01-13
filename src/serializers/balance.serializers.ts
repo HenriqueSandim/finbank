@@ -4,5 +4,5 @@ import { SchemaOf } from "yup";
 
 export const accountSchema: SchemaOf<IAccountResponse> = yup.object().shape({
   id: yup.number().required(),
-  money: yup.string().required(),
+  money: yup.number().required(),
 });

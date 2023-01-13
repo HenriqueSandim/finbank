@@ -1,12 +1,12 @@
 import Account from "../entities/account.entity";
 import Category from "../entities/category.entity";
-import { ICategoryResponse } from "./categories.interfaces";
+import { ICategoryRequest, ICategoryResponse } from "./categories.interfaces";
 
 export interface IFinanceRequest {
   description: string;
   value: number;
   isIncome: boolean;
-  category: ICategoryResponse[];
+  category: ICategoryRequest[];
 }
 
 export interface IFinanceResponse {
