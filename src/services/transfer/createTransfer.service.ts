@@ -1,6 +1,5 @@
 import AppDataSource from "../../data-source";
 import Account from "../../entities/account.entity";
-import Finance from "../../entities/finance.entity";
 import Transference from "../../entities/transference.entity";
 import AppError from "../../errors/AppError";
 import { ITransferRequest } from "../../interfaces/transfer.interfaces";
@@ -40,8 +39,7 @@ const createTransferService = async (
   if (+senderAccount.money < dataTransfer.value) {
     throw new AppError("insufficient money", 401);
   }
-  //   const dateTest = new Date().valueOf();
-  //   console.log(dateTest);
+
   await accountRepo.save([receiverAccount, senderAccount]);
 
   if (dataTransfer.date) {
@@ -54,10 +52,10 @@ const createTransferService = async (
     value: dataTransfer.value,
     category: [{ name: "Salário" }],
   };
-  //Repositório de finanças
+
   await createFinanceService({ ...FinanceData, isIncome: false }, senderAccount.user.id);
   await createFinanceService({ ...FinanceData, isIncome: true }, receiverAccount.user.id);
-  // const { user, ...rest } = senderAccount;
+
   const senderAccountResponse = await accountSchema.validate(senderAccount, {
     stripUnknown: true,
   });
