@@ -1,3 +1,4 @@
 import updateFinanceController from "./updateFinance.controller";
+import createFinanceController from "./createFinnance.controller";
 
-export { updateFinanceController };
+export { createFinanceController, updateFinanceController };

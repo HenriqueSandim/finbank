@@ -25,3 +25,9 @@ export interface IUserResponse {
   updatedAt: string;
   account: IAccountResponse;
 }
+
+export interface IUser {
+  id: string;
+  adm: boolean;
+  account: number;
+}

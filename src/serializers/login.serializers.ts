@@ -11,7 +11,7 @@ const schemaCpfOrEmail = yup.object().shape({
 });
 
 const loginSerializer = schemaCpfOrEmail
-  .test("one-required", "Email or CPF is required", function (value) {
+  .test("one-required", "Email or CPF is required", (value) => {
     const emailIsEmpty = !value.email;
     const cpfIsEmpty = !value.cpf;
     return !(emailIsEmpty && cpfIsEmpty);
