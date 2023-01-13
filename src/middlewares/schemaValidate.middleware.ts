@@ -12,6 +12,7 @@ const schemaValidate = (schema: AnySchema) => async (req: Request, res: Response
 
     return next();
   } catch (err: any) {
+    console.log(err);
     return res.status(400).json({ message: err.errors });
   }
 };
