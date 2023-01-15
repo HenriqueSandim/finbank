@@ -23,8 +23,8 @@ export const createUserSchema: SchemaOf<IUserRequest> = yup.object().shape({
     .string()
     .transform((date) => date.replace(/[-]/g, "/"))
     .test("Date is Valid", "Date format is invalid, format is yyyy/mm/dd", (date) => {
-      const clientDate = new Date(date);
-      return !`${clientDate}`.toLowerCase().includes("invalid") && date.split("/")[0].length == 4;
+      const insertDate = new Date(date);
+      return !`${insertDate}`.toLowerCase().includes("invalid") && date.split("/")[0].length == 4;
     })
     // .test("isValidDate", "date must be in the format mm/dd/yyyy", (date) => {
     //   const [month, day, year] = date!.split("/").map(Number);
