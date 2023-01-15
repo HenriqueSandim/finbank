@@ -36,7 +36,10 @@ const createUserService = async (
 
   let birthday = ``;
 
-  if (process.env.NODE_ENV === "production") {
+  if (
+    process.env.NODE_ENV === "production" ||
+    process.env.NODE_ENV === "test"
+  ) {
     birthday = `${month}-${day}-${year}`;
   } else {
     birthday = `${day}-${month}-${year}`;
