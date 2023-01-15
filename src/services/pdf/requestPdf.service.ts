@@ -1,14 +1,15 @@
 import puppeteer from "puppeteer";
+import "dotenv/config";
 
 const requestPdfService = async (transferId: string, accountid: string) => {
-  const browser = puppeteer.launch();
-  const page = await (await browser).newPage();
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
 
-  await (
-    await page
-  ).goto(
-    `http://localhost:3000/transfer/pdf/generate/${transferId}/${accountid}`
-  );
+  if (process.env.NODE_ENV === "production") {
+    await page.goto(`https://finbank-api.onrender.com/transfer/pdf/generate/${transferId}/${accountid}`);
+  } else {
+    await page.goto(`http://localhost:3000/transfer/pdf/generate/${transferId}/${accountid}`);
+  }
 
   const pdf = await page.pdf({
     printBackground: true,
