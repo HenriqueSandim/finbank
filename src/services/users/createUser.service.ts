@@ -5,9 +5,7 @@ import AppError from "../../errors/AppError";
 import { IUserRequest, IUserResponse } from "../../interfaces/users.interfaces";
 import { returnUserSchema } from "../../serializers/users.serializers";
 
-const createUserService = async (
-  body: IUserRequest
-): Promise<IUserResponse> => {
+const createUserService = async (body: IUserRequest): Promise<IUserResponse> => {
   const userRepo = AppDataSource.getRepository(User);
 
   const foundEmail = await userRepo.find({
@@ -32,22 +30,21 @@ const createUserService = async (
   const accountCreate = accountRepo.create();
   await accountRepo.save(accountCreate);
 
-  const [month, day, year] = body.birthdate.split("/").map(Number);
+  // const [month, day, year] = body.birthdate.split("/").map(Number);
 
-  let birthday = ``;
+  // let birthday = ``;
 
-  if (
-    process.env.NODE_ENV === "production" ||
-    process.env.NODE_ENV === "test"
-  ) {
-    birthday = `${month}-${day}-${year}`;
-  } else {
-    birthday = `${day}-${month}-${year}`;
-  }
+  // if (
+  //   process.env.NODE_ENV === "production" ||
+  //   process.env.NODE_ENV === "test"
+  // ) {
+  //   birthday = `${month}-${day}-${year}`;
+  // } else {
+  //   birthday = `${day}-${month}-${year}`;
+  // }
 
   const userCreation = userRepo.create({
     ...body,
-    birthdate: birthday,
     account: accountCreate,
   });
 
