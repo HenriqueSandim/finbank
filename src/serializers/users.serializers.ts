@@ -26,15 +26,6 @@ export const createUserSchema: SchemaOf<IUserRequest> = yup.object().shape({
       const insertDate = new Date(date);
       return !`${insertDate}`.toLowerCase().includes("invalid") && date.split("/")[0].length == 4;
     })
-    // .test("isValidDate", "date must be in the format mm/dd/yyyy", (date) => {
-    //   const [month, day, year] = date!.split("/").map(Number);
-
-    //   if (month > 12 || day > 31 || year.toString().length !== 4) {
-    //     return false;
-    //   } else {
-    //     return true;
-    //   }
-    // })
     .test("isValidBirthDay", "date must be after year 1900", (date) => {
       if (date) {
         const data = date!.split("/").map(Number);
@@ -43,7 +34,6 @@ export const createUserSchema: SchemaOf<IUserRequest> = yup.object().shape({
     })
     .test("isUnderAge", "client must be 18 years or older", (date) => {
       if (date) {
-        // const [month, day, year] = date!.split("/").map(Number);
         const birthday = new Date(date);
         const ageDifMs = Date.now() - birthday.getTime();
         const ageDate = new Date(ageDifMs);

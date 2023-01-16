@@ -30,19 +30,6 @@ const createUserService = async (body: IUserRequest): Promise<IUserResponse> => 
   const accountCreate = accountRepo.create();
   await accountRepo.save(accountCreate);
 
-  // const [month, day, year] = body.birthdate.split("/").map(Number);
-
-  // let birthday = ``;
-
-  // if (
-  //   process.env.NODE_ENV === "production" ||
-  //   process.env.NODE_ENV === "test"
-  // ) {
-  //   birthday = `${month}-${day}-${year}`;
-  // } else {
-  //   birthday = `${day}-${month}-${year}`;
-  // }
-
   const userCreation = userRepo.create({
     ...body,
     account: accountCreate,
