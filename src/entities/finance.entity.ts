@@ -34,7 +34,7 @@ class Finance {
         (finance_category) => finance_category.finance,
         {
             eager: true,
-            cascade: true,
+            onDelete: "CASCADE",
         }
     )
     financesCategory: Finances_categories[];
