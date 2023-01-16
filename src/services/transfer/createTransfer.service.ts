@@ -47,7 +47,7 @@ const createTransferService = async (
   const financeData: ITransferFinance = {
     description: "Tranference",
     value: dataTransfer.value,
-    category: [{ name: "Transference" }],
+    category: [{ name: "Transferência" }],
     isTransference: true,
   };
 
