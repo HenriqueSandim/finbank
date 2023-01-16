@@ -42,10 +42,10 @@ const createTransferService = async (
 
   await accountRepo.save([receiverAccount, senderAccount]);
 
-  if (dataTransfer.date) {
-    const newDate = new Date(dataTransfer.date);
-    dataTransfer.date = newDate.toISOString().split("T")[0];
-  }
+  // if (dataTransfer.date) {
+  //   const newDate = new Date(dataTransfer.date);
+  //   dataTransfer.date = newDate.toISOString().split("T")[0];
+  // }
 
   const financeData: ITransferFinance = {
     description: "Tranference",
