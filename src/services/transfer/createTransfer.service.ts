@@ -36,9 +36,9 @@ const createTransferService = async (
     },
   });
 
-  if (+senderAccount.money < dataTransfer.value) {
-    throw new AppError("insufficient money", 401);
-  }
+  // if (+senderAccount.money < dataTransfer.value) {
+  //   throw new AppError("insufficient money", 401);
+  // }
 
   await accountRepo.save([receiverAccount, senderAccount]);
 
