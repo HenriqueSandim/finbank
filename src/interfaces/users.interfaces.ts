@@ -18,10 +18,16 @@ export interface IUserResponse {
   id: string;
   name: string;
   email: string;
-  birthdate: Date;
+  birthdate: string;
   isActive: boolean;
   isAdmin: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   account: IAccountResponse;
+}
+
+export interface IUser {
+  id: string;
+  adm: boolean;
+  account: number;
 }

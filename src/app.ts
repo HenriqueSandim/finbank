@@ -6,7 +6,7 @@ import balanceRoutes from "./routes/balance.routes";
 import categoriesRoutes from "./routes/categories.routes";
 import financesRoutes from "./routes/finances.routes";
 import loginRoutes from "./routes/login.routes";
-import tranferRoutes from "./routes/transfer.routes";
+import transferRoutes from "./routes/transfer.routes";
 import userRoutes from "./routes/users.routes";
 
 const app = express();
@@ -16,7 +16,7 @@ app.use("/balance", balanceRoutes);
 app.use("/categories", categoriesRoutes);
 app.use("/finances", financesRoutes);
 app.use("/login", loginRoutes);
-app.use("/transfer", tranferRoutes);
+app.use("/transfer", transferRoutes);
 app.use("/users", userRoutes);
 app.use(handleError);
 
