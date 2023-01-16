@@ -4,7 +4,9 @@ import Transference from "../../entities/transference.entity";
 import AppError from "../../errors/AppError";
 import { ITransferFinance, ITransferRequest } from "../../interfaces/transfer.interfaces";
 import { accountSchema } from "../../serializers/balance.serializers";
+import { sendEmail } from "../email";
 import { createFinanceService } from "../finances";
+import { requestPdfService } from "../pdf";
 
 const createTransferService = async (
   dataTransfer: ITransferRequest,
@@ -67,6 +69,10 @@ const createTransferService = async (
     senderAccount: senderAccountResponse,
   });
   await transferRepo.save(newTransfer);
+
+  const pdf = await requestPdfService(newTransfer.id, senderAccountId);
+  await sendEmail({ subject: "Transfer voucher", text: "", to: senderAccount.user.email, file: pdf });
+  await sendEmail({ subject: "Transfer voucher", text: "", to: receiverAccount.user.email, file: pdf });
 
   return newTransfer;
 };
