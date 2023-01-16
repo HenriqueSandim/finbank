@@ -19,6 +19,7 @@ export interface IUserResponse {
   name: string;
   email: string;
   birthdate: string;
+  image: string;
   isActive: boolean;
   isAdmin: boolean;
   createdAt: string;
