@@ -33,6 +33,6 @@ financesRoutes.post(
 );
 
 financesRoutes.get("", ensureAuthMiddleware, getFinancesController);
-financesRoutes.delete("/:id", ensureAuthMiddleware, deleteFinanceController);
+financesRoutes.delete("/:id", ensureAuthMiddleware, ensureFinanceExistsMiddleware, deleteFinanceController);
 
 export default financesRoutes;
