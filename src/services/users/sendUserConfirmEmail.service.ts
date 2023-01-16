@@ -7,9 +7,7 @@ import { sendEmailService } from "../email";
 const sendUserConfirmEmailService = async (activeData: IActiveRequest) => {
   const user = await AppDataSource.getRepository(User).findOne({
     where: [{ email: activeData.email }, { cpf: activeData.cpf }],
-    relations: {
-      account: true,
-    },
+    withDeleted: true,
   });
 
   if (!user) {

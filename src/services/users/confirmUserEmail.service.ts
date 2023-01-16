@@ -4,8 +4,11 @@ import User from "../../entities/user.entity";
 const confirmUserEmailService = async (userId): Promise<string> => {
   const userRepo = AppDataSource.getRepository(User);
 
-  const user = await userRepo.findOneBy({
-    id: userId,
+  const user = await userRepo.findOne({
+    where: {
+      id: userId,
+    },
+    withDeleted: true,
   });
 
   if (user.isActive) {

@@ -73,7 +73,7 @@ const createTransferService = async (
   await sendEmailService({
     subject: "Comprovante de Transferência",
     text: "",
-    to: "jallessantos12@gmail.com",
+    to: senderAccount.user.email,
     file: pdf,
   });
   await sendEmailService({
