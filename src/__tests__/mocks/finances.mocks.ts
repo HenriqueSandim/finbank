@@ -1,10 +1,14 @@
-import Account from "../../entities/account.entity";
+import { IFinanceRequest, IFinanceUpdate } from "../../interfaces/finances.interfaces";
 
-export const mockedFinance = {
+export const mockedFinance: IFinanceRequest = {
     description: "Finance test",
     value: 1000,
     isIncome: true,
-    account: 0,
-    financesCategory: [{name: "Salario"}],
-    createdAt: "2023/01/14"
+    category: [{name: "Salario"}]
+}
+
+export const mockedFinanceUpdate: IFinanceUpdate = {
+    description: "Test finance",
+    value: 700,
+    isIncome: false
 }

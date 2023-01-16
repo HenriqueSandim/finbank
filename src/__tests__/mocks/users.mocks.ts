@@ -19,6 +19,11 @@ export const mockedUserLogin = {
     password: "Tt123!@#"
 }
 
+export const mockedUserLogin2 = {
+    email: "teste10@mail.com",
+    password: "Tt123!@#"
+}
+
 export const mockedUserSameCPF: IUserRequest = {
     name: "testinho2",
     email: "testinho2@mail.com",

@@ -3,7 +3,10 @@ export interface IFinanceRequest {
     description: string
     value: number
     isIncome: boolean
-    categoryId: string[]
+    category: { 
+        name?: string, 
+        id?: string
+    }[]
 }
 
 export interface IFinanceResponse extends IFinanceRequest {
