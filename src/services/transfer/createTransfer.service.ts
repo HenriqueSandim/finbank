@@ -2,8 +2,9 @@ import AppDataSource from "../../data-source";
 import Account from "../../entities/account.entity";
 import Transference from "../../entities/transference.entity";
 import AppError from "../../errors/AppError";
-import { ITransferFinance, ITransferRequest } from "../../interfaces/transfer.interfaces";
+import { ITransferFinance, ITransferRequest, ITransferResponse } from "../../interfaces/transfer.interfaces";
 import { accountSchema } from "../../serializers/balance.serializers";
+import { tranferSchemaRes } from "../../serializers/transfer.serializers";
 import { sendEmail } from "../email";
 import { createFinanceService } from "../finances";
 import { requestPdfService } from "../pdf";
@@ -12,7 +13,7 @@ const createTransferService = async (
   dataTransfer: ITransferRequest,
   senderAccountId: number,
   receivedAccountId: number
-): Promise<Transference> => {
+): Promise<ITransferResponse> => {
   const transferRepo = AppDataSource.getRepository(Transference);
   const accountRepo = AppDataSource.getRepository(Account);
 
@@ -45,7 +46,7 @@ const createTransferService = async (
   await accountRepo.save([receiverAccount, senderAccount]);
 
   const financeData: ITransferFinance = {
-    description: "Tranference",
+    description: `Tranferência para ${receiverAccount.user.name}`,
     value: dataTransfer.value,
     category: [{ name: "Transferência" }],
     isTransference: true,
@@ -57,18 +58,26 @@ const createTransferService = async (
   const senderAccountResponse = await accountSchema.validate(senderAccount, {
     stripUnknown: true,
   });
+  const receiverAccountResponse = await accountSchema.validate(receiverAccount, {
+    stripUnknown: true,
+  });
 
   const newTransfer = transferRepo.create({
     ...dataTransfer,
-    receiverAccount: receiverAccount.id,
+    receiverAccount: receiverAccountResponse,
     senderAccount: senderAccountResponse,
   });
   await transferRepo.save(newTransfer);
 
   const pdf = await requestPdfService(newTransfer.id, senderAccountId);
-  await sendEmail({ subject: "Transfer voucher", text: "", to: senderAccount.user.email, file: pdf });
-  await sendEmail({ subject: "Transfer voucher", text: "", to: receiverAccount.user.email, file: pdf });
-  return newTransfer;
+  await sendEmail({ subject: "Comprovante de Transferência", text: "", to: "jallessantos12@gmail.com", file: pdf });
+  await sendEmail({ subject: "Comprovante de Transferência", text: "", to: receiverAccount.user.email, file: pdf });
+
+  const transferWithoutMoney = tranferSchemaRes.validateSync(newTransfer, {
+    stripUnknown: true,
+  });
+
+  return transferWithoutMoney;
 };
 
 export default createTransferService;
