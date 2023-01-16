@@ -3,8 +3,6 @@ import Account from "../entities/account.entity"
 export interface ITransferRequest {
     description: string
     value: number
-    senderAccount: string
-    receiverAccount: string
 }
 export interface ITransferResponse {
     id: string
