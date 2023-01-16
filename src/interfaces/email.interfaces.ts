@@ -1,6 +1,9 @@
+import { Url } from "url";
+
 export interface IEmailRequest {
   to: string;
   subject: string;
   text: string;
-  file: Buffer;
+  file?: Buffer;
+  html?: string | Url;
 }

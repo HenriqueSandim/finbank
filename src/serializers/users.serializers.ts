@@ -42,7 +42,7 @@ export const createUserSchema: SchemaOf<IUserRequest> = yup.object().shape({
       }
     })
     .required(),
-  CPF: yup
+  cpf: yup
     .string()
     .test("isValidCpf", "CPF number is not valid", (CPF) => {
       return !cpfSchema.validate(CPF).error;

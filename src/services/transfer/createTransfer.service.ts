@@ -5,7 +5,7 @@ import AppError from "../../errors/AppError";
 import { ITransferFinance, ITransferRequest, ITransferResponse } from "../../interfaces/transfer.interfaces";
 import { accountSchema } from "../../serializers/balance.serializers";
 import { tranferSchemaRes } from "../../serializers/transfer.serializers";
-import { sendEmail } from "../email";
+import { sendEmailService } from "../email";
 import { createFinanceService } from "../finances";
 import { requestPdfService } from "../pdf";
 
@@ -70,8 +70,18 @@ const createTransferService = async (
   await transferRepo.save(newTransfer);
 
   const pdf = await requestPdfService(newTransfer.id, senderAccountId);
-  await sendEmail({ subject: "Comprovante de Transferência", text: "", to: "jallessantos12@gmail.com", file: pdf });
-  await sendEmail({ subject: "Comprovante de Transferência", text: "", to: receiverAccount.user.email, file: pdf });
+  await sendEmailService({
+    subject: "Comprovante de Transferência",
+    text: "",
+    to: "jallessantos12@gmail.com",
+    file: pdf,
+  });
+  await sendEmailService({
+    subject: "Comprovante de Transferência",
+    text: "",
+    to: receiverAccount.user.email,
+    file: pdf,
+  });
 
   const transferWithoutMoney = tranferSchemaRes.validateSync(newTransfer, {
     stripUnknown: true,

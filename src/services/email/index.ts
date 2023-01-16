@@ -1,3 +1,3 @@
-import sendEmail from "./sendEmail.service";
+import sendEmailService from "./sendEmail.service";
 
-export { sendEmail };
+export { sendEmailService };

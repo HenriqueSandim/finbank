@@ -48,9 +48,9 @@ const generatePdfService = async (transferId: string, userAuthAccount: string): 
     id: transfer.id,
     date: tratedDate,
     receiverName: receiverAccount.user.name,
-    receiverCPF: receiverAccount.user.CPF,
+    receiverCPF: receiverAccount.user.cpf,
     senderName: senderAccount.user.name,
-    senderCPF: senderAccount.user.CPF,
+    senderCPF: senderAccount.user.cpf,
     value: `R$ ${transfer.value}`,
   };
 
