@@ -27,10 +27,6 @@ const updateFinanceService = async (
     throw new AppError("It is not possible to change this finance", 401);
   }
 
-  if (finance.isTransference) {
-    throw new AppError("It is not possible to change this finance", 401);
-  }
-
   const categoriesRepo = AppDataSource.getRepository(Category);
   const categoriesName = data.category.map((cat) => cat.name);
   const categoriesId = data.category.map((cat) => cat.id);

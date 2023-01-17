@@ -7,7 +7,7 @@ import {
 } from "../controllers/finances";
 import { ensureAuthMiddleware } from "../middlewares/auth";
 import { ensureCategoryExistsMiddleware } from "../middlewares/categories";
-import { ensureFinanceExistsMiddleware } from "../middlewares/finances";
+import { ensureFinanceExistsMiddleware, ensureFinanceIsTranferenceMiddleware } from "../middlewares/finances";
 import schemaValidate from "../middlewares/schemaValidate.middleware";
 import { createFinanceSchema, updateFinanceSchema } from "../serializers/finances.serializers";
 
@@ -19,6 +19,7 @@ financesRoutes.patch(
   ensureFinanceExistsMiddleware,
   schemaValidate(updateFinanceSchema),
   ensureCategoryExistsMiddleware,
+  ensureFinanceIsTranferenceMiddleware,
   updateFinanceController
 );
 financesRoutes.post(
@@ -30,6 +31,12 @@ financesRoutes.post(
 );
 
 financesRoutes.get("", ensureAuthMiddleware, getFinancesController);
-financesRoutes.delete("/:id", ensureAuthMiddleware, ensureFinanceExistsMiddleware, deleteFinanceController);
+financesRoutes.delete(
+  "/:id",
+  ensureAuthMiddleware,
+  ensureFinanceExistsMiddleware,
+  ensureFinanceIsTranferenceMiddleware,
+  deleteFinanceController
+);
 
 export default financesRoutes;
