@@ -10,8 +10,11 @@ import {
 import uploadUserImageController from "../controllers/users/uploadUserImage.controller";
 import { ensureAuthMiddleware, ensureAdmOwnerAuthMiddleware } from "../middlewares/auth";
 import schemaValidate from "../middlewares/schemaValidate.middleware";
-import { uploadUserImageMiddleware } from "../middlewares/users";
-import ensureUserExistsMiddleware from "../middlewares/users/ensureUserExists.middleware";
+import {
+  ensureImageIsValidMiddleware,
+  ensureUserExistsMiddleware,
+  uploadUserImageMiddleware,
+} from "../middlewares/users";
 import { createUserSchema, updateUserSchema } from "../serializers/users.serializers";
 
 const userRoutes = Router();
@@ -34,6 +37,12 @@ userRoutes.get(
 userRoutes.get("", ensureAuthMiddleware, ensureUserExistsMiddleware, listUserController);
 userRoutes.get("/active/:id", ensureUserExistsMiddleware, confirmUserEmailController);
 userRoutes.post("/active/", sendUserConfirmEmailController);
-userRoutes.post("/image", uploadUserImageMiddleware.single("image"), ensureAuthMiddleware, uploadUserImageController);
+userRoutes.post(
+  "/image",
+  uploadUserImageMiddleware.single("image"),
+  ensureImageIsValidMiddleware,
+  ensureAuthMiddleware,
+  uploadUserImageController
+);
 
 export default userRoutes;
