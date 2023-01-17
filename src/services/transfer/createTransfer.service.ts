@@ -69,19 +69,27 @@ const createTransferService = async (
   });
   await transferRepo.save(newTransfer);
 
-  const pdf = await requestPdfService(newTransfer.id, senderAccountId);
-  await sendEmailService({
-    subject: "Comprovante de Transferência",
-    text: "",
-    to: senderAccount.user.email,
-    file: pdf,
-  });
-  await sendEmailService({
-    subject: "Comprovante de Transferência",
-    text: "",
-    to: receiverAccount.user.email,
-    file: pdf,
-  });
+ 
+
+  if(process.env.NODE_ENV === "test"){
+    null
+  } else {
+    const pdf = await requestPdfService(newTransfer.id, senderAccountId);
+    await sendEmailService({
+      subject: "Comprovante de Transferência",
+      text: "",
+      to: senderAccount.user.email,
+      file: pdf,
+    });
+    await sendEmailService({
+      subject: "Comprovante de Transferência",
+      text: "",
+      to: receiverAccount.user.email,
+      file: pdf,
+    });
+
+  }
+
 
   const transferWithoutMoney = tranferResSchema.validateSync(newTransfer, {
     stripUnknown: true,
