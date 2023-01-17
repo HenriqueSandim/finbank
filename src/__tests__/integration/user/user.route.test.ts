@@ -66,7 +66,7 @@ describe("Create user route test", () => {
     })
 
     it("Should not be able to create user with invalid date", async () => {
-        const response = await request(app).post(`${baseUrl}/active/`).send(mockedUserWrongBirthdate)
+        const response = await request(app).post(`${baseUrl}`).send(mockedUserWrongBirthdate)
 
         expect(response.body).toHaveProperty("message")
         expect(response.status).toBe(400)

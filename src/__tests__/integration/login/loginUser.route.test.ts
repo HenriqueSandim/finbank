@@ -5,7 +5,6 @@ import app from "../../../app";
 import {
   mockedUserLogin,
   mockedUserRequest,
-  mockedUserRequest2,
 } from "../../mocks/users.mocks";
 
 describe("Login user route test", () => {

@@ -4,7 +4,7 @@ export const mockedFinance: IFinanceRequest = {
     description: "Finance test",
     value: 1000,
     isIncome: true,
-    category: [{name: "Salario"}]
+    category: [{id: "a3ca34b3-9606-46bd-8f65-21a80159089c"}]
 }
 
 export const mockedFinanceUpdate: IFinanceUpdate = {
