@@ -10,9 +10,11 @@ import {
 import uploadUserImageController from "../controllers/users/uploadUserImage.controller";
 import { ensureAuthMiddleware, ensureAdmOwnerAuthMiddleware } from "../middlewares/auth";
 import schemaValidate from "../middlewares/schemaValidate.middleware";
-import { uploadUserImageMiddleware } from "../middlewares/users";
-import ensureImageIsValidMiddleware from "../middlewares/users/ensureImageIsValid.middleware";
-import ensureUserExistsMiddleware from "../middlewares/users/ensureUserExists.middleware";
+import {
+  ensureImageIsValidMiddleware,
+  ensureUserExistsMiddleware,
+  uploadUserImageMiddleware,
+} from "../middlewares/users";
 import { createUserSchema, updateUserSchema } from "../serializers/users.serializers";
 
 const userRoutes = Router();
