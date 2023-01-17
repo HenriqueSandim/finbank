@@ -2,7 +2,7 @@ import AppDataSource from "../../data-source";
 import Account from "../../entities/account.entity";
 import Transference from "../../entities/transference.entity";
 import { ITransferResponse } from "../../interfaces/transfer.interfaces";
-import { tranferSchemaRes } from "../../serializers/transfer.serializers";
+import { tranferResSchema } from "../../serializers/transfer.serializers";
 
 const listAllTransfersService = async (userAccountId: number): Promise<ITransferResponse[]> => {
   const accountRepo = AppDataSource.getRepository(Account);
@@ -20,7 +20,7 @@ const listAllTransfersService = async (userAccountId: number): Promise<ITransfer
   });
 
   const tranferencesWithoutMoney: ITransferResponse[] = await account.transference.map((transf) => {
-    const validatedTransferences = tranferSchemaRes.validateSync(transf, {
+    const validatedTransferences = tranferResSchema.validateSync(transf, {
       stripUnknown: true,
     });
 

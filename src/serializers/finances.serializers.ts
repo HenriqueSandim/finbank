@@ -1,11 +1,6 @@
 import * as yup from "yup";
 import { SchemaOf } from "yup";
-import {
-  IFinanceResponseArray,
-  IFinanceUpdate,
-  IFinanceUpdateResponse,
-  TFinanceCategoryWithoutFinance,
-} from "../interfaces/finances.interfaces";
+import { IFinanceResponseArray, IFinanceUpdate, IFinanceUpdateResponse } from "../interfaces/finances.interfaces";
 import { ICategoryResponse } from "../interfaces/categories.interfaces";
 import { IFinanceRequest, IFinanceResponse } from "../interfaces/finances.interfaces";
 
@@ -24,7 +19,7 @@ export const createFinanceSchema: SchemaOf<Omit<IFinanceRequest, "error">> = yup
   category: yup.array().of(validCategorySchema).required(),
 });
 
-export const updateFinanceSerializer: SchemaOf<Omit<IFinanceUpdate, "error">> = yup.object().shape({
+export const updateFinanceSchema: SchemaOf<Omit<IFinanceUpdate, "error">> = yup.object().shape({
   description: yup.string(),
   value: yup.number(),
   isIncome: yup.boolean(),
@@ -37,10 +32,6 @@ const updateFinanceArray: SchemaOf<IFinanceResponseArray> = yup.object().shape({
     id: yup.string(),
     name: yup.string(),
   }),
-});
-
-const errorShape = yup.object().shape({
-  message: yup.string(),
 });
 
 export const updateFinanceRespSchema: SchemaOf<IFinanceUpdateResponse> = yup.object().shape({

@@ -1,7 +1,8 @@
 import * as yup from "yup";
 import { SchemaOf } from "yup";
 import { ITransferRequest, ITransferResponse } from "../interfaces/transfer.interfaces";
-export const transferSchemaReq: SchemaOf<ITransferRequest> = yup.object().shape({
+
+export const transferReqSchema: SchemaOf<ITransferRequest> = yup.object().shape({
   description: yup.string().required(),
   value: yup.number().required(),
   date: yup
@@ -21,7 +22,7 @@ export const transferSchemaReq: SchemaOf<ITransferRequest> = yup.object().shape(
     .notRequired(),
 });
 
-export const tranferSchemaRes: SchemaOf<ITransferResponse> = yup.object().shape({
+export const tranferResSchema: SchemaOf<ITransferResponse> = yup.object().shape({
   id: yup.string(),
   description: yup.string(),
   date: yup.date(),

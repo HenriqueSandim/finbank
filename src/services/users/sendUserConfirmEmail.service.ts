@@ -4,7 +4,7 @@ import AppError from "../../errors/AppError";
 import { IActiveRequest } from "../../interfaces/users.interfaces";
 import { sendEmailService } from "../email";
 
-const sendUserConfirmEmailService = async (activeData: IActiveRequest) => {
+const sendUserConfirmEmailService = async (activeData: IActiveRequest): Promise<string> => {
   const user = await AppDataSource.getRepository(User).findOne({
     where: [{ email: activeData.email }, { cpf: activeData.cpf }],
     withDeleted: true,
