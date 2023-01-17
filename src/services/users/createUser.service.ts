@@ -4,6 +4,8 @@ import User from "../../entities/user.entity";
 import AppError from "../../errors/AppError";
 import { IUserRequest, IUserResponse } from "../../interfaces/users.interfaces";
 import { returnUserSchema } from "../../serializers/users.serializers";
+import "dotenv/config";
+import sendUserConfirmEmailService from "./sendUserConfirmEmail.service";
 
 const createUserService = async (body: IUserRequest): Promise<IUserResponse> => {
   const userRepo = AppDataSource.getRepository(User);
@@ -14,7 +16,7 @@ const createUserService = async (body: IUserRequest): Promise<IUserResponse> => 
   });
 
   const foundCPF = await userRepo.find({
-    where: { CPF: body.CPF },
+    where: { cpf: body.cpf },
     withDeleted: true,
   });
 
@@ -30,7 +32,10 @@ const createUserService = async (body: IUserRequest): Promise<IUserResponse> => 
   const accountCreate = accountRepo.create();
   await accountRepo.save(accountCreate);
 
-  const userCreation = userRepo.create({ ...body, account: accountCreate });
+  const userCreation = userRepo.create({
+    ...body,
+    account: accountCreate,
+  });
 
   await userRepo.save(userCreation);
 
@@ -38,6 +43,8 @@ const createUserService = async (body: IUserRequest): Promise<IUserResponse> => 
     abortEarly: false,
     stripUnknown: true,
   });
+
+  await sendUserConfirmEmailService({ email: userCreation.email, cpf: userCreation.cpf });
 
   return validateUserReturn;
 };

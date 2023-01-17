@@ -21,11 +21,19 @@ const updateUserService = async (payload: IUserRequestUpdate, userId: string) =>
     },
   });
 
-  const updatedUser = userRepo.create({
-    ...user,
-    ...payload,
-  });
+  let updatedUser;
 
+  if (!payload.password) {
+    updatedUser = userRepo.create({
+      ...payload,
+      ...user,
+    });
+  } else {
+    updatedUser = userRepo.create({
+      ...user,
+      ...payload,
+    });
+  }
   await userRepo.save(updatedUser);
 
   const updatedUserResponse: IUserResponse = await returnUserSchema.validate(updatedUser, {

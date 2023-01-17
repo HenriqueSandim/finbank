@@ -7,13 +7,17 @@ import { tranferSchemaRes } from "../../serializers/transfer.serializers";
 const listAllTransfersService = async (userAccountId: number): Promise<ITransferResponse[]> => {
   const accountRepo = AppDataSource.getRepository(Account);
 
-  const account = await accountRepo
-    .createQueryBuilder("accounts")
-    .innerJoinAndSelect("accounts.transference", "transference")
-    .innerJoinAndSelect("transference.receiverAccount", "receiver")
-    .innerJoinAndSelect("transference.senderAccount", "sender")
-    .where("accounts.id = :id", { id: userAccountId })
-    .getOne();
+  const account = await accountRepo.findOne({
+    where: {
+      id: userAccountId,
+    },
+    relations: {
+      transference: {
+        receiverAccount: true,
+        senderAccount: true,
+      },
+    },
+  });
 
   const tranferencesWithoutMoney: ITransferResponse[] = await account.transference.map((transf) => {
     const validatedTransferences = tranferSchemaRes.validateSync(transf, {

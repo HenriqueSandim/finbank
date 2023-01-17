@@ -1,7 +1,5 @@
 import { Router } from "express";
-import { updateFinanceController } from "../controllers/finances";
-import createFinanceController from "../controllers/finances/createFinnance.controller";
-import getFinancesController from "../controllers/finances/getFinances.controller";
+import { createFinanceController, getFinancesController, updateFinanceController } from "../controllers/finances";
 import { ensureAuthMiddleware } from "../middlewares/auth";
 import { ensureCategoryExistsMiddleware } from "../middlewares/categories";
 import { ensureFinanceExistsMiddleware } from "../middlewares/finances";
