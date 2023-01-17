@@ -405,12 +405,14 @@ As finanças tem a seguinte estrutura no banco de dados
 ### Rotas
 | Método                          | Rota                     | Descrição                            |
 |---------------------------------|--------------------------|--------------------------------------|
-| [GET](#41-criar-finança)        | /finance                 | Criar finança para o usuário.        |
+| [POST](#41-criar-finança)       | /finance                 | Criar finança para o usuário.        |
 | [GET](#42-listar-finanças)      | /finance                 | Lista as finanças do usuário.        |
-| [GET](#43-atualizar-finança)    | /finance/:finance_id     | Atualiza as informações da finança.  |
-| [GET](#44-deletar-finança)      | /finance/:finance_id     | Deleta uma finanças de um usuário.   |
+| [PATCH](#43-atualizar-finança)  | /finance/:finance_id     | Atualiza as informações da finança.  |
+| [DELETE](#44-deletar-finança)   | /finance/:finance_id     | Deleta uma finanças de um usuário.   |
 
 ### 4.1. Criar finança
+[Índice endpoints](#3-endpoints)
+
 _Método POST na rota `/finance`, precisa de token_
 
 | Campo               | Tipo              | Descrição                                                             |
@@ -423,28 +425,165 @@ _Método POST na rota `/finance`, precisa de token_
 Dados da requisição: 
 ```
 {
-  description: "Nome teste",
-  value: 1000,
-  isIncome: true,
-  categoryId: [
-    {name: "Salário"}
-  ]
+	"description": "Nome teste",
+	"value": 1000,
+	"isIncome": true,
+	"category": [
+		{"name": "Salário"}
+	]
 }
 ```
 
 - Resposta (Sucesso) - status 200: 
 ```
 {
-  id: string;
-  description: "Nome teste";
-  value: 1000,
-  isIncome: true,
-  isTransference: false,
-  createdAt: Tue Jan 17 2023 15:15:55 GMT-0300 (Brasilia Standard Time),
-  
+	"id": "45612226-f148-47d3-bd17-18d7ace8b37b",
+	"description": "Nome teste",
+	"value": "1000.00",
+	"isIncome": true,
+	"isTransference": false,
+	"createdAt": "2023-01-17T19:01:43.482Z",
+	"financesCategory": [
+		{
+			"id": "a9032ee6-8197-4535-9387-e8f3665ec88d",
+			"category": {
+				"id": "937a63da-8d58-4da8-a4dc-5ae64e3e5f33",
+				"name": "Salário"
+			}
+		}
+	]
 }
 ```
 
+- Respota (Faltando token) - status 401 - Faltando token de autorização para a requisição
+```
+{
+  "message": "Missing headers authorization"
+}
+```
+
+### 4.2. Listar finanças 
+[Índice endpoints](#3-endpoints)
+
+_Método GET na rota `/finance`, precisa de token_
+
+- Resposta (Sucesso) - status 200 
+```
+{
+  {
+		"id": "45612226-f148-47d3-bd17-18d7ace8b37b",
+		"description": "Salário do Aviãozinho",
+		"value": "1000.00",
+		"isIncome": true,
+		"isTransference": false,
+		"createdAt": "2023-01-17T19:01:43.482Z",
+		"financesCategory": [
+			{
+				"id": "a9032ee6-8197-4535-9387-e8f3665ec88d",
+				"category": {
+					"id": "937a63da-8d58-4da8-a4dc-5ae64e3e5f33",
+					"name": "Salário"
+				}
+			}
+		]
+	},
+	{
+		"id": "77f80f99-67db-4c4e-87e9-0e30d4e4bd56",
+		"description": "MGLU 3",
+		"value": "18600.00",
+		"isIncome": false,
+		"isTransference": false,
+		"createdAt": "2023-01-17T19:10:07.264Z",
+		"financesCategory": [
+			{
+				"id": "bd2ad903-f7d9-4f76-aba3-4daca9a19200",
+				"category": {
+					"id": "12b01c64-d13d-44c5-b271-19e7460b187a",
+					"name": "Compras"
+				}
+			}
+		]
+	},
+  ...
+}
+```
+
+- Respota (Faltando token) - status 401 - Faltando token de autorização para a requisição
+```
+{
+  "message": "Missing headers authorization"
+}
+```
+
+### 4.3. Atualizar finança
+[Índice endpoints](#3-endpoints)
+
+_Método PATCH na rota `/finance/:finance_id`, precisa de token_
+
+Só é possivel editar finanças que não sejam originadas de transferencias e que sejam do usuário logado.
+
+| Campo                   | Tipo      | Descrição                                                             |
+| ------------------------|-----------|-----------------------------------------------------------------------|
+| description             | string    | Atualiza a descrição para a finança.                                  |
+| value                   | number    | Atualiza o valor da finança.                                          |
+| isIncome                | boolean   | Atualiza o booleano que indica se é receita(true) ou despesa(false).  |
+| category                | array of objects  | Array com objetos contendo nome ou id da categoria desejada.  |
+
+Dados: 
+```
+{
+	"description": "Arroz",
+	"category": [
+		{"name": "Compras"}
+	]
+}
+```
+
+- Response (Sucesso) - status 200 
+```
+{
+	"financesCategory": [
+		{
+			"category": {
+				"id": "12b01c64-d13d-44c5-b271-19e7460b187a",
+				"name": "Compras"
+			},
+			"id": "cf13410d-b93b-4a1b-8d49-dc52a2fd1a5e"
+		}
+	],
+	"createdAt": "2023-01-17T19:10:17.605Z",
+	"isTransference": false,
+	"isIncome": false,
+	"value": 500,
+	"description": "Arroz",
+	"id": "2c6f3c35-a188-4767-b568-1d32f0ae290e"
+}
+```
+
+- Respota (Faltando token) - status 401 - Faltando token de autorização para a requisição
+```
+{
+  "message": "Missing headers authorization"
+}
+```
+
+### 4.4. Deletar finança 
+[Índice endpoints](#3-endpoints)
+
+_Método DELETE na rota `/finance/:finance_id`, precisa de token_
+
+Só pode deletar uma finança que é do user logado.
+
+- Resposta (Sucesso) - status 204, sem retorno de dados
+
+- Respota (Faltando token) - status 401 - Faltando token de autorização para a requisição
+```
+{
+  "message": "Missing headers authorization"
+}
+```
+
+## 5.
 
 ## 6. Categorias
 [Índice endpoints](#3-endpoints)
