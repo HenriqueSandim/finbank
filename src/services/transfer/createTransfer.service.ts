@@ -4,7 +4,7 @@ import Transference from "../../entities/transference.entity";
 import AppError from "../../errors/AppError";
 import { ITransferFinance, ITransferRequest, ITransferResponse } from "../../interfaces/transfer.interfaces";
 import { accountSchema } from "../../serializers/balance.serializers";
-import { tranferSchemaRes } from "../../serializers/transfer.serializers";
+import { tranferResSchema } from "../../serializers/transfer.serializers";
 import { sendEmailService } from "../email";
 import { createFinanceService } from "../finances";
 import { requestPdfService } from "../pdf";
@@ -83,7 +83,7 @@ const createTransferService = async (
     file: pdf,
   });
 
-  const transferWithoutMoney = tranferSchemaRes.validateSync(newTransfer, {
+  const transferWithoutMoney = tranferResSchema.validateSync(newTransfer, {
     stripUnknown: true,
   });
 
