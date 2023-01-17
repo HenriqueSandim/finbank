@@ -39,6 +39,9 @@ class User {
   @Column({ unique: true })
   cpf: string;
 
+  @Column({ nullable: true, default: null })
+  image: string;
+
   @Column({ default: false })
   isActive: boolean;
 

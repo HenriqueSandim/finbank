@@ -24,6 +24,7 @@ export interface IUserResponse {
   createdAt: string;
   updatedAt: string;
   account: IAccountResponse;
+  image?: string;
 }
 
 export interface IUser {

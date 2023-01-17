@@ -54,6 +54,7 @@ export const returnUserSchema: SchemaOf<IUserResponse> = yup.object().shape({
   id: yup.string().required(),
   name: yup.string().required(),
   email: yup.string().required(),
+  image: yup.string().nullable().notRequired(),
   birthdate: yup.string().required(),
   isActive: yup.boolean().required(),
   isAdmin: yup.boolean(),
