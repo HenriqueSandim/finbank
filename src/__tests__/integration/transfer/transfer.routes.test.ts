@@ -58,12 +58,7 @@ describe("Transfer route test", () => {
     const createFinance = await request(app)
       .post(`/finances`)
       .set("Authorization", `Bearer ${userLogin.body.token}`)
-      .send({
-        description: "Finance test",
-        value: 1000,
-        isIncome: true,
-        category: [{ name: "Energia" }],
-      });
+      .send(mockedFinance);
 
     const response = await request(app)
       .post(`${baseUrl}/${mockedUserTransfer.receiverAccount}`)
