@@ -79,11 +79,25 @@ Lembrando que é necessário configurar suas váriaveis de ambiente antes de rea
 [Tópicos de conteúdo](#tópicos-de-conteúdo)
 ### Índice
 - [Usuários](#1-usuários)
-    - []()
+  - [Criação de usuários](#11-criação-de-usuários)
+  - [Ativação de usuários](#12-ativação-de-usuários)
+  - [Edição de usuários](#13-edição-de-usuários)
+  - [Deleção de usuários](#14-deleção-de-usuários)
+  - [Mostrar usuário logado](#15-mostrar-usuário-logado)
+- [Login](#2-login)
+  - [Login de usuário](#21-login-de-usuários)
+- [Conta](#3-conta)
+  - [Consultar saldo da conta](#31-consultar-saldo-da-conta)
+- [Finanças](#4-finanças)
+  - []
+- [Categorias](#6-categorias)
+  - [Listar categorias](#61-listar-categorias)
 
  
 
 ## 1. Usuários
+[Índice endpoints](#3-endpoints)
+
 Usuários tem as seguintes informações dentro da DataBase:
 | Campo        | Tipo    | Descrição                                       |
 | -------------|---------|-------------------------------------------------|
@@ -100,15 +114,18 @@ Usuários tem as seguintes informações dentro da DataBase:
 | deletedAt    | date    | Data indicando a deleção da conta.              |
 | accountId    | string  | Identificador ligado a account do usuário.      |
 
-### EndPoints
-| Método   | Rota              | Descrição                               |
-|----------|-------------------|-----------------------------------------|
-| POST     | /users            | Criação de um usuário.                  |
-| PATCH    | /users/:user_id   | Atualiza os dados de um usuário.        |
-| DELETE   | /users/:user_id   | Deleta um usuário.                      |
-| GET      | /users/:user_id   | Pega as informações do usuário.         |
+### Rotas
+| Método                              | Rota                     | Descrição                          |
+|-------------------------------------|--------------------------|------------------------------------|
+| [POST](#11-criação-de-usuários)     | /users                   | Criação de um usuário.             |
+| [GET](#12-ativação-de-usuários)     | /users/active/:user_id   | Ativa a conta do usuário.          |
+| [PATCH](#13-edição-de-usuário)      | /users/:user_id          | Atualiza os dados de um usuário.   |
+| [DELETE](#14-deleção-de-usuários)   | /users/:user_id          | Deleta um usuário.                 |
+| [GET](#15-mostrar-usuário-logado)   | /users/:user_id          | Pega as informações do usuário.    |
+### 1.1 Criação de usuários
+[Índice endpoints](#3-endpoints)
 
-### 1.1. Criação de usuários - ("/users") - POST
+_Método POST em `"/users"`_
 
   Dados de envio
 ```
@@ -166,22 +183,35 @@ Usuários tem as seguintes informações dentro da DataBase:
   }
 ```
   
-#####  Ativação de novos usuários ("users/active/:id") - GET
+### 1.2. Ativação de usuários
+[Índice endpoints](#3-endpoints)
 
-  - Após a criação do usuário, será enviado um email para ativação da conta 📩
-  - Porém é possível ativar a conta através dessa rota
+_Método GET na rota `/users/active/:user_id`_
+
+Após a criação do usuário, será enviado um email para ativação da conta 📩
+Porém é possível ativar a conta através dessa rota
   
-  - Resposta (Sucesso) - status 200 
-
+- Resposta (Sucesso) - status 200 
  ```
 {
 	"message": "User actived"
 }
 ```
   
-  
-##### Edição de usuários - ("/users/:id") - PATCH - autenticada 🔐
-Dados de envio
+### 1.3. Edição de usuários 
+[Índice endpoints](#3-endpoints)
+
+_Método PATCH na rota `"/users/:id"`, precisa de autenticação._
+
+| Campo editável  | Tipo    | Descrição                          |
+| ----------------|---------|------------------------------------|
+| name            | string  |  Atualiza o nome do usuário        |
+| email           |string   | Atualiza o e-mail do usuário       |
+| password        | string  |  Atualiza a senha do usuário       |
+
+Os outros campos não são editáveis.
+
+Dados de envio:
 ```
   {
     "name": "Maria José Silva",
@@ -189,9 +219,7 @@ Dados de envio
     "password": "Senha123!@"
   }
 ```
-
-  - Resposta (sucesso) - status: 201
-
+- Resposta (sucesso) - status: 201
 ```
   {
 	"account": {
@@ -209,7 +237,7 @@ Dados de envio
   }
 ```
 
- - Resposta (Dados incorretos) - status 400 - no caso de nenhum campo editável ser enviado:
+- Resposta (Dados incorretos) - status 400 - no caso de nenhum campo editável ser enviado:
 ```
   {
     "birthdate": "1980/05/15",
@@ -217,38 +245,54 @@ Dados de envio
   }
 ```
 
-
-   - Resposta (Dados incorretos) - status 400 - no caso dos dados enviados não serem válidos, exemplo:
-
+- Resposta (Dados incorretos) - status 400 - no caso dos dados enviados não serem válidos, exemplo:
  ```
 {
 	"message": "No filed allowed to be updated sent"
 }
 ```
 
-   - Resposta (Proibido) - status 403 - no caso de tentar editar um usuário que não seja você, ou você não seja admin, exemplo:
-
+- Resposta (Proibido) - status 403 - no caso de tentar editar um usuário que não seja você, ou você não seja admin, exemplo:
  ```
 {
 	"message": "Requires Admin or Owner permission"
 }
+  ```
+
+- Respota (Faltando token) - status 401 - Faltando token de autorização para a requisição
 ```
-##### Deleção de usuários - ("/users/:id") - DELETE - autenticada 🔐
+{
+  "message": "Missing headers authorization"
+}
+```
+    
+### 1.4. Deleção de usuários
+[Índice endpoints](#3-endpoints)
 
-  - Resposta (Sucesso) - status 204 - no caso de sucesso nenhum corpo é retornado
+_Método DELETE para a rota `"/users/:id"`, precisa de autenticação._
 
-  - Resposta (Proibido) - status 403 - no caso de tentar deletar um usuário que não seja você, ou você não seja admin, exemplo:
 
- ```
+- Resposta (Sucesso) - status 204 - no caso de sucesso nenhum corpo é retornado
+
+- Resposta (Proibido) - status 403 - no caso de tentar deletar um usuário que não seja você e você não seja admin:
+```
 {
 	"message": "Requires Admin or Owner permission"
 }
 ```
 
-##### Mostrar usuário logado - ("/users") - GET - autenticada 🔐
+- Respota (Faltando token) - status 401 - Faltando token de autorização para a requisição
+```
+{
+  "message": "Missing headers authorization"
+}
+```
 
-  - Resposta (sucesso) - status: 201
+### 1.5. Mostrar usuário logado
+[Índice endpoints](#3-endpoints)
 
+_Método GET na rota `"/users"`, necessário estar autenticado._
+- Resposta (sucesso) - status: 201
 ```
   {
 	"account": {
@@ -266,8 +310,31 @@ Dados de envio
   }
 ```
 
-#### Login ("/login")
-##### Login de usuários - ("/login") - POST
+- Respota (Faltando token) - status 401 - Faltando token de autorização para a requisição
+```
+{
+  "message": "Missing headers authorization"
+}
+```
+
+## 2. Login
+[Índice endpoints](#3-endpoints)
+
+Usuários tem as seguintes informações dentro da DataBase:
+| Campo        | Tipo    | Descrição                                       |
+| -------------|---------|-------------------------------------------------|
+| email        | string  | O e-mail do usuário.                            |
+| password     | string  | A senha de acesso do usuário                    |
+
+### Rotas
+| Método                              | Rota                     | Descrição                          |
+|-------------------------------------|--------------------------|------------------------------------|
+| [POST](#21-login-de-usuários)       | /login                   | Login de um usuário.               |
+### 2.1 Login de usuários
+[Índice endpoints](#3-endpoints)
+
+_Método POST para o endpoint `"/login"`._
+
 Dados de envio
 ```
   {
@@ -276,20 +343,137 @@ Dados de envio
   }
 ```
 
-  - Resposta (sucesso) - status: 201
-
+- Resposta (sucesso) - status: 201
 ```
 {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50IjoxLCJhZG0iO..."
 }
 ```
 
-  - Resposta (Proibido) - status: 403 - no caso de usuário e/ou senha incorretos
-
+- Resposta (Proibido) - status: 403 - no caso de usuário e/ou senha incorretos
 ```
 {
 	"message": "Incorrect user"
 }
 ```
 
+## 3. Conta
+[Índice endpoints](#3-endpoints)
+
+Endpoint para pegar o dinheiro da conta
+
+| Campo        | Tipo    | Descrição                                       |
+| -------------|---------|-------------------------------------------------|
+| id           | number  | Identificador único do usuário                  |
+| money        | number  | Quantidade de dinheiro da conta                 |
+| userId       | string  | Identificador para a relação com a tabela users |
+
+### Rotas:
+| Método                          | Rota                     | Descrição                          |
+|---------------------------------|--------------------------|------------------------------------|
+| [GET](#31-saldo-do-usuário)     | /balance                 | Ver o saldo do usuário.            |
+
+### 3.1 Consultar saldo da conta 
+[Índice endpoints](#3-endpoints)
+
+_Vê o saldo atual do usúario logado na rota `/balance`, necessário o token_
+
+- Resposta (sucesso) - status 200 
+```
+{
+  money: 0
+}
+``` 
+
+
+## 4. Finanças
+[Índice endpoints](#3-endpoints)
+
+Endpoint para lidar com as finanças presentes na API
+
+As finanças tem a seguinte estrutura no banco de dados
+| Campo               | Tipo      | Descrição                                                             |
+| --------------------|-----------|-----------------------------------------------------------------------|
+| id                  | number    | Identificador único da finança.                                       |
+| description         | string    | Descrição para a finança.                                             |
+| value               | number    | Valor da finança.                                                     |
+| isIncome            | boolean   | Booleano para indicar se é receita(true) ou despesa(false).           |
+| isTransference      | boolean   | Booleano para indicar se a finança é originiada de uma transferencia  |
+| createdAt           | date      | Data indicando a criação da finança                                   |
+| accountId           | number    | Identificador da account do usuário                                   |
+
+### Rotas
+| Método                          | Rota                     | Descrição                            |
+|---------------------------------|--------------------------|--------------------------------------|
+| [GET](#41-criar-finança)        | /finance                 | Criar finança para o usuário.        |
+| [GET](#42-listar-finanças)      | /finance                 | Lista as finanças do usuário.        |
+| [GET](#43-atualizar-finança)    | /finance/:finance_id     | Atualiza as informações da finança.  |
+| [GET](#44-deletar-finança)      | /finance/:finance_id     | Deleta uma finanças de um usuário.   |
+
+### 4.1. Criar finança
+_Método POST na rota `/finance`, precisa de token_
+
+| Campo               | Tipo              | Descrição                                                             |
+| --------------------|-------------------|-----------------------------------------------------------------------|
+| id                  | number            | Identificador único da finança.                                       |
+| description         | string            | Descrição para a finança.                                             |
+| value               | number            | Valor da finança.                                                     |
+| category            | array of objects  | Array com objetos contendo nome ou id da categoria desejada.          |
+
+Dados da requisição: 
+```
+{
+  description: "Nome teste",
+  value: 1000,
+  isIncome: true,
+  categoryId: [
+    {name: "Salário"}
+  ]
+}
+```
+
+- Resposta (Sucesso) - status 200: 
+```
+{
+  id: string;
+  description: "Nome teste";
+  value: 1000,
+  isIncome: true,
+  isTransference: false,
+  createdAt: Tue Jan 17 2023 15:15:55 GMT-0300 (Brasilia Standard Time),
+  
+}
+```
+
+
+## 6. Categorias
+[Índice endpoints](#3-endpoints)
+
+Rota responsável pelas categorias do banco de dados.
+
+| Método                          | Rota                     | Descrição                                        |
+|---------------------------------|--------------------------|--------------------------------------------------|
+| [GET](#61-listar-categorias)    | /categories              | Lista as categorias presentes no banco de dados. |
+
+
+### 6.1. Listar categorias
+[Índice endpoints](#3-endpoints)
+
+_Método GET na rota `/categories`_
+- Resposta(Sucesso) - status 200 
+```
+  [
+    {id: "e8c3744b-9c70-4005-8983-4395c7b7b9be", name: "Salário"},
+    {id: "ebdb6af0-29a2-4447-aec6-60986c48b008", name: "Energia"},
+    {id: "f099bb02-379a-408b-a57b-1248c5540878", name: "Lazer"},
+    ...
+  ]
+```
+
+- Respota (Faltando token) - status 401 - Faltando token de autorização para a requisição
+```
+{
+  "message": "Missing headers authorization"
+}
+```
 
