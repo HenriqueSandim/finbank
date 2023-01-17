@@ -7,6 +7,10 @@ import { IFinanceRequest } from "../../interfaces/finances.interfaces";
 const ensureCategoryExistsMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   const data: IFinanceRequest = req.body;
 
+  if (!data.category) {
+    return next();
+  }
+
   const categoriesRepo = AppDataSource.getRepository(Category);
 
   const categoriesExistsPromisse = data.category.map(async (cat) => {

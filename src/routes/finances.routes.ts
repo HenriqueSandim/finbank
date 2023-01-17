@@ -5,7 +5,7 @@ import {
   updateFinanceController,
   deleteFinanceController,
 } from "../controllers/finances";
-import { ensureAuthMiddleware } from "../middlewares/auth";
+import { ensureAdmOwnerAuthMiddleware, ensureAuthMiddleware } from "../middlewares/auth";
 import { ensureCategoryExistsMiddleware } from "../middlewares/categories";
 import { ensureFinanceExistsMiddleware, ensureFinanceIsTranferenceMiddleware } from "../middlewares/finances";
 import schemaValidate from "../middlewares/schemaValidate.middleware";
@@ -35,6 +35,7 @@ financesRoutes.delete(
   "/:id",
   ensureAuthMiddleware,
   ensureFinanceExistsMiddleware,
+  ensureAdmOwnerAuthMiddleware,
   ensureFinanceIsTranferenceMiddleware,
   deleteFinanceController
 );
