@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-const schemaCpfOrEmail = yup.object().shape({
+const CpfOrEmailSchema = yup.object().shape({
   email: yup.string().email("Invalid email"),
   cpf: yup
     .string()
@@ -10,15 +10,11 @@ const schemaCpfOrEmail = yup.object().shape({
     ),
 });
 
-const loginSerializer = schemaCpfOrEmail
-  .test("one-required", "Email or CPF is required", (value) => {
-    const emailIsEmpty = !value.email;
-    const cpfIsEmpty = !value.cpf;
-    return !(emailIsEmpty && cpfIsEmpty);
-  })
-
-  .shape({
-    password: yup.string().required("Required password"),
-  });
-
-export default loginSerializer;
+export const loginSchema = CpfOrEmailSchema.test("one-required", "Email or CPF is required", (value) => {
+  const emailIsEmpty = !value.email;
+  const cpfIsEmpty = !value.cpf;
+  return !(emailIsEmpty && cpfIsEmpty);
+})
+.shape({
+  password: yup.string().required("Required password"),
+});

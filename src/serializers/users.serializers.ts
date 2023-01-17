@@ -21,24 +21,28 @@ export const createUserSchema: SchemaOf<IUserRequest> = yup.object().shape({
     .max(16, "Must be at most 16 digits long"),
   birthdate: yup
     .string()
+    .transform((date) => date.replace(/[-]/g, "/"))
+    .test("Date is Valid", "Date format is invalid, format is yyyy/mm/dd", (date) => {
+      const insertDate = new Date(date);
+      return !`${insertDate}`.toLowerCase().includes("invalid") && date.split("/")[0].length == 4;
+    })
     .test("isValidBirthDay", "date must be after year 1900", (date) => {
       if (date) {
         const data = date!.split("/").map(Number);
-        //mes-dia-ano
-        return data[2] > 1900;
+        return data[0] > 1900;
       }
     })
     .test("isUnderAge", "client must be 18 years or older", (date) => {
       if (date) {
-        const data = date!.split("/").map(Number);
-        const birthday = new Date(data[2], data[1] - 1, data[0]);
-        const today = new Date();
-        const age = (today.getTime() - birthday.getTime()) / 31536000000;
-        return age > 18;
+        const birthday = new Date(date);
+        const ageDifMs = Date.now() - birthday.getTime();
+        const ageDate = new Date(ageDifMs);
+        const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+        return age >= 18;
       }
     })
     .required(),
-  CPF: yup
+  cpf: yup
     .string()
     .test("isValidCpf", "CPF number is not valid", (CPF) => {
       return !cpfSchema.validate(CPF).error;
@@ -50,6 +54,7 @@ export const returnUserSchema: SchemaOf<IUserResponse> = yup.object().shape({
   id: yup.string().required(),
   name: yup.string().required(),
   email: yup.string().required(),
+  image: yup.string().nullable().notRequired(),
   birthdate: yup.string().required(),
   isActive: yup.boolean().required(),
   isAdmin: yup.boolean(),

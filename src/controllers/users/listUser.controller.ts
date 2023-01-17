@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import listUserService from "../../services/users/listUser.service";
+import { listUserService } from "../../services/users";
 
 const listUserController = async (req: Request, res: Response) => {
-  const data = await listUserService(req.params.id);
+  const data = await listUserService(req.params.id, req.user.id);
 
   return res.status(200).json(data);
 };

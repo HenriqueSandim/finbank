@@ -5,7 +5,7 @@ export interface IUserRequest {
   email: string;
   password: string;
   birthdate: string;
-  CPF: string;
+  cpf: string;
 }
 
 export interface IUserRequestUpdate {
@@ -24,10 +24,16 @@ export interface IUserResponse {
   createdAt: string;
   updatedAt: string;
   account: IAccountResponse;
+  image?: string;
 }
 
 export interface IUser {
   id: string;
   adm: boolean;
   account: number;
+}
+
+export interface IActiveRequest {
+  email?: string;
+  cpf?: string;
 }

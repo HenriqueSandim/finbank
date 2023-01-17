@@ -5,7 +5,8 @@ import AppError from "../../errors/AppError";
 import { validate } from "uuid";
 
 const ensureUserExistsMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-  const { id } = req.params;
+  let id;
+  req.params.id ? (id = req.params.id) : (id = req.user.id);
 
   const userRepo = AppDataSource.getRepository(User);
 
