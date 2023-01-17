@@ -4,14 +4,8 @@ import AppDataSource from "../../data-source";
 import User from "../../entities/user.entity";
 import AppError from "../../errors/AppError";
 
-const uploadUserImageService = async (
-  file: Express.Multer.File,
-  userID: string
-): Promise<object> => {
-  const upload = await cloudinary.uploader.upload(
-    file!.path,
-    (error, result) => result
-  );
+const uploadUserImageService = async (file: Express.Multer.File, userID: string): Promise<object> => {
+  const upload = await cloudinary.uploader.upload(file!.path, (error, result) => result);
 
   fs.unlink(file!.path, (error) => {
     if (error) {

@@ -2,7 +2,7 @@ import AppDataSource from "../../data-source";
 import User from "../../entities/user.entity";
 import { IUserResponse } from "../../interfaces/users.interfaces";
 import { returnUserSchema } from "../../serializers/users.serializers";
-import {v2 as cloudinary} from "cloudinary"
+import { v2 as cloudinary } from "cloudinary";
 
 const listUserService = async (paramId: string, userId: string): Promise<IUserResponse> => {
   let id;
@@ -20,13 +20,13 @@ const listUserService = async (paramId: string, userId: string): Promise<IUserRe
     withDeleted: true,
   });
 
-  const imageUrl = cloudinary.url(user.image)
+  user.image = cloudinary.url(user.image);
 
   const userResponse = await returnUserSchema.validate(user, {
     stripUnknown: true,
   });
 
-  return {...userResponse, image: imageUrl};
+  return userResponse;
 };
 
 export default listUserService;

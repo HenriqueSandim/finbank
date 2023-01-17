@@ -39,7 +39,7 @@ class User {
   @Column({ unique: true })
   cpf: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: null })
   image: string;
 
   @Column({ default: false })
