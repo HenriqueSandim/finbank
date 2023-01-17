@@ -2,7 +2,7 @@ import request from "supertest"
 import { DataSource } from "typeorm"
 import AppDataSource from "../../../data-source"
 import app from "../../../app"
-import { mockedUserLogin } from "../../mocks/users.mocks"
+import { mockedUserLogin, mockedUserRequest, mockedUserRequest2 } from "../../mocks/users.mocks"
 
 describe("Login user route test", () => {
     let con: DataSource
@@ -12,10 +12,24 @@ describe("Login user route test", () => {
         await AppDataSource.initialize()
         .then((res) => con = res)
         .catch(err => console.error(err))
+
+        
     })
 
     afterAll(async () => {
         await con.destroy()
+    })
+
+    it("Should be active user", async () => {
+    
+       const userIDActive = await request(app).post('/users').send(mockedUserRequest)
+
+        console.log(userIDActive.body.id)
+
+        const response = await request(app).get(`/users/active/${userIDActive.body.id}`)
+
+        expect(response.body).toHaveProperty("message")
+        expect(response.status).toBe(200)
     })
 
     it("Should be able to login with user", async () => {
@@ -33,7 +47,7 @@ describe("Login user route test", () => {
     })
 
     it("Should not be able to login with incorrect CPF", async () => {
-        const response = await request(app).post(baseUrl).send({...mockedUserLogin, cpf: "705.566.260-52"})
+        const response = await request(app).post(baseUrl).send({cpf: "711.526.667-82", password: "Tt123!@#"})
 
         expect(response.body).toHaveProperty("message")
         expect(response.status).toBe(400)
