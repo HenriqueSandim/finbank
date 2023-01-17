@@ -1,37 +1,62 @@
-import request from "supertest"
-import { DataSource } from "typeorm"
-import AppDataSource from "../../../data-source"
-import app from "../../../app"
-import { mockedUserLogin, mockedUserRequest } from "../../mocks/users.mocks"
+import request from "supertest";
+import { DataSource } from "typeorm";
+import AppDataSource from "../../../data-source";
+import app from "../../../app";
+import { mockedUserLogin, mockedUserRequest } from "../../mocks/users.mocks";
+import Category from "../../../entities/category.entity";
 
 describe("Login user route test", () => {
-    let con: DataSource
-    const baseUrl: string = "/categories"
+  let con: DataSource;
+  const baseUrl: string = "/categories";
 
-    beforeAll(async () => {
-        await AppDataSource.initialize()
-        .then((res) => con = res)
-        .catch(err => console.error(err))
-    })
+  beforeAll(async () => {
+    await AppDataSource.initialize()
+      .then((res) => (con = res))
+      .catch((err) => console.error(err));
 
-    afterAll(async () => {
-        await con.destroy()
-    })
+    await AppDataSource.createQueryBuilder()
+      .insert()
+      .into(Category)
+      .values([
+        {
+          name: "Energia",
+        },
+        {
+          name: "Compras",
+        },
+        {
+          name: "Água",
+        },
+        {
+          name: "Internet",
+        },
+        {
+          name: "Boletos",
+        },
+        {
+          name: "Lazer",
+        },
+        {
+          name: "Gasto Mensal",
+        },
+        {
+          name: "Salário",
+        },
+        {
+          name: "Transferência",
+        },
+      ])
+      .execute();
+  });
 
-    it("Should be able to list categories", async () => {
-        await request(app).post("/users").send(mockedUserRequest)
-        const user = await request(app).post("/login").send(mockedUserLogin)
+  afterAll(async () => {
+    await con.destroy();
+  });
 
-        const response = await request(app).get(`${baseUrl}`).set("Authorization", `Bearer ${user.body.token}`)
+  it("Should be able to list categories", async () => {
+    const response = await request(app).get(`${baseUrl}`);
 
-        expect(response.body).toHaveLength(8)
-        expect(response.status).toBe(200)
-    })
-
-    it("Should not be able to list categories without token", async () => {
-        const response = await request(app).get(`${baseUrl}`)
-
-        expect(response.body).toHaveProperty("message")
-        expect(response.status).toBe(401)
-    })
-})
+    expect(response.body).toHaveLength(9);
+    expect(response.status).toBe(200);
+  });
+});
