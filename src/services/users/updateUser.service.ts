@@ -1,3 +1,4 @@
+import { hash } from "bcryptjs";
 import AppDataSource from "../../data-source";
 import User from "../../entities/user.entity";
 import AppError from "../../errors/AppError";
@@ -12,31 +13,20 @@ const updateUserService = async (payload: IUserRequestUpdate, userId: string) =>
   }
 
   const userRepo = AppDataSource.getRepository(User);
+
+  const updateHashedPass = async () => {
+    const hashedPass = await hash(payload.password, 10);
+    await userRepo.update(userId, { ...payload, password: hashedPass });
+  };
+
+  payload.password ? await updateHashedPass() : await userRepo.update(userId, { ...payload });
+
   const user = await userRepo.findOne({
-    where: {
-      id: userId,
-    },
-    relations: {
-      account: true,
-    },
+    where: { id: userId },
+    relations: { account: true },
   });
 
-  let updatedUser;
-
-  if (!payload.password) {
-    updatedUser = userRepo.create({
-      ...payload,
-      ...user,
-    });
-  } else {
-    updatedUser = userRepo.create({
-      ...user,
-      ...payload,
-    });
-  }
-  await userRepo.save(updatedUser);
-
-  const updatedUserResponse: IUserResponse = await returnUserSchema.validate(updatedUser, {
+  const updatedUserResponse: IUserResponse = await returnUserSchema.validate(user, {
     stripUnknown: true,
   });
 

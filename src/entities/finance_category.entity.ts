@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import Category from "./category.entity";
 import Finance from "./finance.entity";
 
@@ -12,7 +12,9 @@ class Finances_categories {
   })
   category: Category;
 
-  @ManyToOne(() => Finance, (finance) => finance.financesCategory)
+  @ManyToOne(() => Finance, (finance) => finance.financesCategory, {
+    onDelete: "CASCADE",
+  })
   finance: Finance;
 }
 

@@ -8,17 +8,11 @@ import {
   updateUserController,
 } from "../controllers/users";
 import uploadUserImageController from "../controllers/users/uploadUserImage.controller";
-import {
-  ensureAuthMiddleware,
-  ensureAdmOwnerAuthMiddleware,
-} from "../middlewares/auth";
+import { ensureAuthMiddleware, ensureAdmOwnerAuthMiddleware } from "../middlewares/auth";
 import schemaValidate from "../middlewares/schemaValidate.middleware";
 import { uploadUserImageMiddleware } from "../middlewares/users";
 import ensureUserExistsMiddleware from "../middlewares/users/ensureUserExists.middleware";
-import {
-  createUserSchema,
-  updateUserSchema,
-} from "../serializers/users.serializers";
+import { createUserSchema, updateUserSchema } from "../serializers/users.serializers";
 
 const userRoutes = Router();
 userRoutes.patch(
@@ -29,12 +23,7 @@ userRoutes.patch(
   updateUserController
 );
 userRoutes.post("", schemaValidate(createUserSchema), createUserController);
-userRoutes.delete(
-  "/:id",
-  ensureAuthMiddleware,
-  ensureAdmOwnerAuthMiddleware,
-  deleteUserController
-);
+userRoutes.delete("/:id", ensureAuthMiddleware, ensureAdmOwnerAuthMiddleware, deleteUserController);
 userRoutes.get(
   "/:id",
   ensureAuthMiddleware,
@@ -42,23 +31,9 @@ userRoutes.get(
   ensureUserExistsMiddleware,
   listUserController
 );
-userRoutes.get(
-  "",
-  ensureAuthMiddleware,
-  ensureUserExistsMiddleware,
-  listUserController
-);
-userRoutes.get(
-  "/active/:id",
-  ensureUserExistsMiddleware,
-  confirmUserEmailController
-);
+userRoutes.get("", ensureAuthMiddleware, ensureUserExistsMiddleware, listUserController);
+userRoutes.get("/active/:id", ensureUserExistsMiddleware, confirmUserEmailController);
 userRoutes.post("/active/", sendUserConfirmEmailController);
-userRoutes.post(
-  "/image",
-  uploadUserImageMiddleware.single("image"),
-  ensureAuthMiddleware,
-  uploadUserImageController
-);
+userRoutes.post("/image", uploadUserImageMiddleware.single("image"), ensureAuthMiddleware, uploadUserImageController);
 
 export default userRoutes;
