@@ -2,7 +2,7 @@ import request from "supertest"
 import { DataSource } from "typeorm"
 import AppDataSource from "../../../data-source"
 import app from "../../../app"
-import { mockedUserRequest, mockedUserSameCPF, mockedUserWeakPassword, mockedUserWrongBirthdate, mockedUserWrongCPF } from "../../mocks/users.mocks"
+import { mockedUserRequest, mockedUserRequest2, mockedUserSameCPF, mockedUserWeakPassword, mockedUserWrongBirthdate, mockedUserWrongCPF } from "../../mocks/users.mocks"
 
 describe("Create user route test", () => {
     let con: DataSource
@@ -29,9 +29,9 @@ describe("Create user route test", () => {
         expect(response.body).toHaveProperty("isAdmin")
         expect(response.body).toHaveProperty("createdAt")
         expect(response.body).toHaveProperty("updatedAt")
-        expect(response.body).toHaveProperty("accountId")
-        expect(response.body.accountId).toHaveProperty("money")
-        expect(response.body.accountId).toHaveProperty("accountId")
+        expect(response.body).toHaveProperty("account")
+        expect(response.body.account).toHaveProperty("money")
+        expect(response.body.account).toHaveProperty("id")
         expect(response.body).not.toHaveProperty("password")
         expect(response.body).not.toHaveProperty("deletedAt")
         expect(response.status).toBe(201)
@@ -66,9 +66,11 @@ describe("Create user route test", () => {
     })
 
     it("Should not be able to create user with invalid date", async () => {
-        const response = await request(app).post(baseUrl).send(mockedUserWrongBirthdate)
+        const response = await request(app).post(`${baseUrl}`).send(mockedUserWrongBirthdate)
 
         expect(response.body).toHaveProperty("message")
         expect(response.status).toBe(400)
     })
+
+
 })

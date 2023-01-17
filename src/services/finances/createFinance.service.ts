@@ -4,9 +4,9 @@ import Category from "../../entities/category.entity";
 import Finance from "../../entities/finance.entity";
 import Finances_categories from "../../entities/finance_category.entity";
 import User from "../../entities/user.entity";
-import { IFinanceRequest } from "../../interfaces/finances.interfaces";
+import { IFinanceResponse, IFinanceTransfRequest } from "../../interfaces/finances.interfaces";
 
-const createFinanceService = async (body: IFinanceRequest, userId: string): Promise<Finance> => {
+const createFinanceService = async (body: IFinanceTransfRequest, userId: string): Promise<IFinanceResponse> => {
   //Repositório do Usuário
   const userRepo = AppDataSource.getRepository(User);
   const foundUser = await userRepo.findOne({
@@ -32,6 +32,7 @@ const createFinanceService = async (body: IFinanceRequest, userId: string): Prom
     description: body.description,
     isIncome: body.isIncome,
     account: foundUser.account,
+    isTransference: body.isTransference,
   });
   await financeRepo.save(newFinance);
 

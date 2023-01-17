@@ -20,9 +20,13 @@ describe("User balance route test", () => {
 
     it("Should be able to list user balance", async () => {
         const user = await request(app).post("/users").send(mockedUserRequest)
+        const confirmUser = await request(app).get(`/users/active/${user.body.id}`);
         const userLogin = await request(app).post("/login").send(mockedUserLogin)
+   
 
-        const response = await request(app).get(`${baseUrl}/${user.body.id}`).set("Authorization", `Bearer ${userLogin.body.token}`)
+        const response = await request(app).get(`${baseUrl}`).set("Authorization", `Bearer ${userLogin.body.token}`)
+
+
 
         expect(response.body).toHaveProperty("money")
         expect(response.status).toBe(200)

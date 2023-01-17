@@ -8,7 +8,7 @@ import "dotenv/config";
 
 const loginUserService = async (data: ILoginRequest): Promise<string> => {
   const user = await AppDataSource.getRepository(User).findOne({
-    where: [{ email: data.email }, { CPF: data.cpf }],
+    where: [{ email: data.email }, { cpf: data.cpf }],
     relations: {
       account: true,
     },
@@ -18,14 +18,14 @@ const loginUserService = async (data: ILoginRequest): Promise<string> => {
     throw new AppError("Incorrect user", 403);
   }
 
-  if (!user.isActive) {
-    throw new AppError("Incorrect user", 403);
-  }
-
   const passwordMatch = await compare(data.password, user.password);
 
   if (!passwordMatch) {
     throw new AppError("Incorrect user", 403);
+  }
+
+  if (!user.isActive) {
+    throw new AppError("Confirm your email", 401);
   }
 
   const token = jwt.sign(

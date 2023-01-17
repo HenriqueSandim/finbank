@@ -1,4 +1,4 @@
-import Account from "../entities/account.entity";
+import { IFinanceRequest } from "./finances.interfaces";
 
 export interface ITransferRequest {
   description: string;
@@ -18,4 +18,8 @@ export interface ITransferResponse {
   senderAccount: {
     id: number;
   };
+}
+
+export interface ITransferFinance extends Omit<IFinanceRequest, "isIncome"> {
+  isTransference: boolean;
 }

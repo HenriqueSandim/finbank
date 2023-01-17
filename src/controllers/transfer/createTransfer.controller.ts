@@ -4,7 +4,7 @@ import { createTransferService } from "../../services/transfer";
 
 const createTransferController = async (req: Request, res: Response) => {
   const dataTransfer: ITransferRequest = req.body;
-  const accountId = req.user.account;
+  const accountId: number = +req.user.account;
   const receivedId: number = +req.params.id;
 
   const data = await createTransferService(dataTransfer, accountId, receivedId);

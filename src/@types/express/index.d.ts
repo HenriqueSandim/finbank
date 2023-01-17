@@ -9,6 +9,9 @@ declare global {
         adm: boolean;
         account: number;
       };
+      error: {
+        message: string;
+      };
     }
   }
 }

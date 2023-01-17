@@ -2,15 +2,18 @@ import AppDataSource from "../../data-source";
 import Account from "../../entities/account.entity";
 import Transference from "../../entities/transference.entity";
 import AppError from "../../errors/AppError";
-import { ITransferRequest } from "../../interfaces/transfer.interfaces";
+import { ITransferFinance, ITransferRequest, ITransferResponse } from "../../interfaces/transfer.interfaces";
 import { accountSchema } from "../../serializers/balance.serializers";
+import { tranferResSchema } from "../../serializers/transfer.serializers";
+import { sendEmailService } from "../email";
 import { createFinanceService } from "../finances";
+import { requestPdfService } from "../pdf";
 
 const createTransferService = async (
   dataTransfer: ITransferRequest,
   senderAccountId: number,
   receivedAccountId: number
-): Promise<Transference> => {
+): Promise<ITransferResponse> => {
   const transferRepo = AppDataSource.getRepository(Transference);
   const accountRepo = AppDataSource.getRepository(Account);
 
@@ -42,32 +45,57 @@ const createTransferService = async (
 
   await accountRepo.save([receiverAccount, senderAccount]);
 
-  if (dataTransfer.date) {
-    const newDate = new Date(dataTransfer.date);
-    dataTransfer.date = newDate.toISOString().split("T")[0];
-  }
-
-  const FinanceData = {
-    description: "Tranference",
+  const financeData: ITransferFinance = {
+    description: `Tranferência para ${receiverAccount.user.name}`,
     value: dataTransfer.value,
-    category: [{ name: "Salário" }],
+    category: [{ name: "Transferência" }],
+    isTransference: true,
   };
 
-  await createFinanceService({ ...FinanceData, isIncome: false }, senderAccount.user.id);
-  await createFinanceService({ ...FinanceData, isIncome: true }, receiverAccount.user.id);
+  await createFinanceService({ ...financeData, isIncome: false }, senderAccount.user.id);
+  await createFinanceService({ ...financeData, isIncome: true }, receiverAccount.user.id);
 
   const senderAccountResponse = await accountSchema.validate(senderAccount, {
+    stripUnknown: true,
+  });
+  const receiverAccountResponse = await accountSchema.validate(receiverAccount, {
     stripUnknown: true,
   });
 
   const newTransfer = transferRepo.create({
     ...dataTransfer,
-    receiverAccount: receiverAccount.id,
+    receiverAccount: receiverAccountResponse,
     senderAccount: senderAccountResponse,
   });
   await transferRepo.save(newTransfer);
 
-  return newTransfer;
+ 
+
+  if(process.env.NODE_ENV === "test"){
+    null
+  } else {
+    const pdf = await requestPdfService(newTransfer.id, senderAccountId);
+    await sendEmailService({
+      subject: "Comprovante de Transferência",
+      text: "",
+      to: senderAccount.user.email,
+      file: pdf,
+    });
+    await sendEmailService({
+      subject: "Comprovante de Transferência",
+      text: "",
+      to: receiverAccount.user.email,
+      file: pdf,
+    });
+
+  }
+
+
+  const transferWithoutMoney = tranferResSchema.validateSync(newTransfer, {
+    stripUnknown: true,
+  });
+
+  return transferWithoutMoney;
 };
 
 export default createTransferService;

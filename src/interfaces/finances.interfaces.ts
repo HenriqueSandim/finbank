@@ -1,26 +1,53 @@
-import Account from "../entities/account.entity";
-import Category from "../entities/category.entity";
-import { ICategoryRequest, ICategoryResponse } from "./categories.interfaces";
+import Finances_categories from "../entities/finance_category.entity";
+import { ICategoryRequest } from "./categories.interfaces";
 
 export interface IFinanceRequest {
   description: string;
   value: number;
   isIncome: boolean;
   category: ICategoryRequest[];
+  error?: {
+    message: string;
+  };
+}
+
+export interface IFinanceTransfRequest extends IFinanceRequest {
+  isTransference: boolean;
 }
 
 export interface IFinanceResponse {
   id: string;
   description: string;
-  value: string;
+  value: number;
   isIncome: boolean;
   isTransference: boolean;
-  createdAt: string;
-  categoriesList: ICategoryResponse[];
+  createdAt: Date;
+  financesCategory: Finances_categories[];
+  error?: {
+    message?: string;
+  };
 }
 
 export interface IFinanceUpdate {
   description?: string;
   value?: number;
   isIncome?: boolean;
+  category?: ICategoryRequest[];
+  error?: {
+    message?: string;
+  };
+}
+
+export type TFinanceCategoryWithoutFinance = Omit<Finances_categories, "finance">;
+
+export interface IFinanceResponseArray {
+  id: string;
+  category: {
+    id: string;
+    name: string;
+  };
+}
+
+export interface IFinanceUpdateResponse extends Omit<IFinanceResponse, "financesCategory"> {
+  financesCategory: IFinanceResponseArray[];
 }

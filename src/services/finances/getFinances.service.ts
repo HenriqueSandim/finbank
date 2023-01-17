@@ -11,6 +11,9 @@ const getFinancesService = async (userData: IUser): Promise<Finance[]> => {
         id: userData.account,
       },
     },
+    relations: {
+      financesCategory: true,
+    },
   });
 
   return financeList;

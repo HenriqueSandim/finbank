@@ -22,7 +22,9 @@ class Finance {
   @ManyToOne(() => Account, (account) => account.id)
   account: Account;
 
-  @OneToMany(() => Finances_categories, (finance_category) => finance_category.finance, { eager: true })
+  @OneToMany(() => Finances_categories, (finance_category) => finance_category.finance, {
+    eager: true,
+  })
   financesCategory: Finances_categories[];
 
   @CreateDateColumn()
