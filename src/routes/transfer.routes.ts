@@ -4,11 +4,11 @@ import { createTransferController, listAllTransfersController } from "../control
 import { ensureAuthMiddleware } from "../middlewares/auth";
 import schemaValidate from "../middlewares/schemaValidate.middleware";
 import { ensureTransferExistsMiddlware } from "../middlewares/transfer";
-import { transferSchemaReq } from "../serializers/transfer.serializers";
+import { transferReqSchema } from "../serializers/transfer.serializers";
 
 const transferRoutes = Router();
 
-transferRoutes.post("/:id", ensureAuthMiddleware, schemaValidate(transferSchemaReq), createTransferController);
+transferRoutes.post("/:id", ensureAuthMiddleware, schemaValidate(transferReqSchema), createTransferController);
 transferRoutes.get("", ensureAuthMiddleware, listAllTransfersController);
 transferRoutes.get("/pdf/:id", ensureAuthMiddleware, ensureTransferExistsMiddlware, requestPdfController);
 transferRoutes.get("/pdf/generate/:id/:accountid", generatePdfController);

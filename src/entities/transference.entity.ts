@@ -18,9 +18,8 @@ class Transference {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => Account, (account) => account.id)
-  @JoinColumn()
-  receiverAccount: number;
+  @ManyToOne(() => Account, (account) => account.transference)
+  receiverAccount: Account;
 
   @ManyToOne(() => Account, (account) => account.transference)
   senderAccount: Account;

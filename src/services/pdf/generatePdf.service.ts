@@ -14,13 +14,14 @@ const generatePdfService = async (transferId: string, userAuthAccount: string): 
     },
     relations: {
       senderAccount: true,
+      receiverAccount: true,
     },
   });
 
   const accountRepository = AppDataSource.getRepository(Account);
   const receiverAccount = await accountRepository.findOne({
     where: {
-      id: transfer.receiverAccount,
+      id: transfer.receiverAccount.id,
     },
     relations: {
       user: true,
@@ -47,9 +48,9 @@ const generatePdfService = async (transferId: string, userAuthAccount: string): 
     id: transfer.id,
     date: tratedDate,
     receiverName: receiverAccount.user.name,
-    receiverCPF: receiverAccount.user.CPF,
+    receiverCPF: receiverAccount.user.cpf,
     senderName: senderAccount.user.name,
-    senderCPF: senderAccount.user.CPF,
+    senderCPF: senderAccount.user.cpf,
     value: `R$ ${transfer.value}`,
   };
 
