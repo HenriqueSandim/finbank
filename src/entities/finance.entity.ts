@@ -24,7 +24,6 @@ class Finance {
 
   @OneToMany(() => Finances_categories, (finance_category) => finance_category.finance, {
     eager: true,
-    onDelete: "CASCADE",
   })
   financesCategory: Finances_categories[];
 

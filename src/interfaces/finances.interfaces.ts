@@ -1,7 +1,5 @@
-import Account from "../entities/account.entity";
-import Category from "../entities/category.entity";
 import Finances_categories from "../entities/finance_category.entity";
-import { ICategoryRequest, ICategoryResponse } from "./categories.interfaces";
+import { ICategoryRequest } from "./categories.interfaces";
 
 export interface IFinanceRequest {
   description: string;
@@ -11,6 +9,10 @@ export interface IFinanceRequest {
   error?: {
     message: string;
   };
+}
+
+export interface IFinanceTransfRequest extends IFinanceRequest {
+  isTransference: boolean;
 }
 
 export interface IFinanceResponse {
@@ -28,8 +30,6 @@ export interface IFinanceResponse {
 
 export interface IFinanceUpdate {
   description?: string;
-  value?: number;
-  isIncome?: boolean;
   category?: ICategoryRequest[];
   error?: {
     message?: string;

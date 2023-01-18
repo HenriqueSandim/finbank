@@ -4,15 +4,20 @@ import Category from "../../entities/category.entity";
 import Finance from "../../entities/finance.entity";
 import Finances_categories from "../../entities/finance_category.entity";
 import User from "../../entities/user.entity";
-import { IFinanceRequest, IFinanceResponse } from "../../interfaces/finances.interfaces";
+import AppError from "../../errors/AppError";
+import { IFinanceResponse, IFinanceTransfRequest } from "../../interfaces/finances.interfaces";
 
-const createFinanceService = async (body: IFinanceRequest, userId: string): Promise<IFinanceResponse> => {
+const createFinanceService = async (body: IFinanceTransfRequest, userId: string): Promise<IFinanceResponse> => {
   //Repositório do Usuário
   const userRepo = AppDataSource.getRepository(User);
   const foundUser = await userRepo.findOne({
     where: { id: userId },
     relations: { account: true },
   });
+
+  if (body.value <= 0) {
+    throw new AppError("invalid value");
+  }
 
   //Alterar o valor da conta
   if (body.isIncome) {
@@ -32,6 +37,7 @@ const createFinanceService = async (body: IFinanceRequest, userId: string): Prom
     description: body.description,
     isIncome: body.isIncome,
     account: foundUser.account,
+    isTransference: body.isTransference,
   });
   await financeRepo.save(newFinance);
 

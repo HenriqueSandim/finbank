@@ -2,17 +2,24 @@ import AppDataSource from "../../data-source";
 import Account from "../../entities/account.entity";
 import Transference from "../../entities/transference.entity";
 import AppError from "../../errors/AppError";
-import { ITransferFinance, ITransferRequest } from "../../interfaces/transfer.interfaces";
+import { ITransferFinance, ITransferRequest, ITransferResponse } from "../../interfaces/transfer.interfaces";
 import { accountSchema } from "../../serializers/balance.serializers";
+import { tranferResSchema } from "../../serializers/transfer.serializers";
+import { sendEmailService } from "../email";
 import { createFinanceService } from "../finances";
+import { requestPdfService } from "../pdf";
 
 const createTransferService = async (
   dataTransfer: ITransferRequest,
   senderAccountId: number,
   receivedAccountId: number
-): Promise<Transference> => {
+): Promise<ITransferResponse> => {
   const transferRepo = AppDataSource.getRepository(Transference);
   const accountRepo = AppDataSource.getRepository(Account);
+
+  if (dataTransfer.value <= 0) {
+    throw new AppError("invalid value");
+  }
 
   const receiverAccount = await accountRepo.findOne({
     where: {
@@ -21,10 +28,15 @@ const createTransferService = async (
     relations: {
       user: true,
     },
+    withDeleted: true,
   });
 
   if (!receiverAccount) {
     throw new AppError("account not found", 404);
+  }
+
+  if (!receiverAccount.user.isActive) {
+    throw new AppError("receiver account is desactive");
   }
 
   const senderAccount = await accountRepo.findOne({
@@ -42,15 +54,10 @@ const createTransferService = async (
 
   await accountRepo.save([receiverAccount, senderAccount]);
 
-  if (dataTransfer.date) {
-    const newDate = new Date(dataTransfer.date);
-    dataTransfer.date = newDate.toISOString().split("T")[0];
-  }
-
   const financeData: ITransferFinance = {
-    description: "Tranference",
+    description: `Tranferência para ${receiverAccount.user.name}`,
     value: dataTransfer.value,
-    category: [{ name: "Salário" }],
+    category: [{ name: "Transferência" }],
     isTransference: true,
   };
 
@@ -60,15 +67,40 @@ const createTransferService = async (
   const senderAccountResponse = await accountSchema.validate(senderAccount, {
     stripUnknown: true,
   });
+  const receiverAccountResponse = await accountSchema.validate(receiverAccount, {
+    stripUnknown: true,
+  });
 
   const newTransfer = transferRepo.create({
     ...dataTransfer,
-    receiverAccount: receiverAccount.id,
+    receiverAccount: receiverAccountResponse,
     senderAccount: senderAccountResponse,
   });
   await transferRepo.save(newTransfer);
 
-  return newTransfer;
+  if (process.env.NODE_ENV === "test") {
+    null;
+  } else {
+    const pdf = await requestPdfService(newTransfer.id, senderAccountId);
+    await sendEmailService({
+      subject: "Comprovante de Transferência",
+      text: "",
+      to: senderAccount.user.email,
+      file: pdf,
+    });
+    await sendEmailService({
+      subject: "Comprovante de Transferência",
+      text: "",
+      to: receiverAccount.user.email,
+      file: pdf,
+    });
+  }
+
+  const transferWithoutMoney = tranferResSchema.validateSync(newTransfer, {
+    stripUnknown: true,
+  });
+
+  return transferWithoutMoney;
 };
 
 export default createTransferService;

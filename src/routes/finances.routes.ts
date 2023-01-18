@@ -1,12 +1,15 @@
 import { Router } from "express";
-import { updateFinanceController } from "../controllers/finances";
-import createFinanceController from "../controllers/finances/createFinnance.controller";
-import getFinancesController from "../controllers/finances/getFinances.controller";
-import { ensureAuthMiddleware } from "../middlewares/auth";
+import {
+  createFinanceController,
+  getFinancesController,
+  updateFinanceController,
+  deleteFinanceController,
+} from "../controllers/finances";
+import { ensureAdmOwnerAuthMiddleware, ensureAuthMiddleware } from "../middlewares/auth";
 import { ensureCategoryExistsMiddleware } from "../middlewares/categories";
-import { ensureFinanceExistsMiddleware } from "../middlewares/finances";
+import { ensureFinanceExistsMiddleware, ensureFinanceIsTranferenceMiddleware } from "../middlewares/finances";
 import schemaValidate from "../middlewares/schemaValidate.middleware";
-import { createFinanceSchema, updateFinanceSerializer } from "../serializers/finances.serializers";
+import { createFinanceSchema, updateFinanceSchema } from "../serializers/finances.serializers";
 
 const financesRoutes = Router();
 
@@ -14,8 +17,9 @@ financesRoutes.patch(
   "/:id",
   ensureAuthMiddleware,
   ensureFinanceExistsMiddleware,
-  schemaValidate(updateFinanceSerializer),
+  schemaValidate(updateFinanceSchema),
   ensureCategoryExistsMiddleware,
+  ensureFinanceIsTranferenceMiddleware,
   updateFinanceController
 );
 financesRoutes.post(
@@ -27,5 +31,12 @@ financesRoutes.post(
 );
 
 financesRoutes.get("", ensureAuthMiddleware, getFinancesController);
+financesRoutes.delete(
+  "/:id",
+  ensureAuthMiddleware,
+  ensureFinanceExistsMiddleware,
+  ensureFinanceIsTranferenceMiddleware,
+  deleteFinanceController
+);
 
 export default financesRoutes;

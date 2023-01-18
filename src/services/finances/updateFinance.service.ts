@@ -14,48 +14,68 @@ const updateFinanceService = async (
 ): Promise<IFinanceUpdateResponse> => {
   const financeRepository = AppDataSource.getRepository(Finance);
 
-  const finance = await financeRepository
-    .createQueryBuilder("finance")
-    .innerJoinAndSelect("finance.financesCategory", "financesCategory")
-    .where("finance.account = :account AND finance.id = :id", {
-      account: accountId,
+  const finance = await financeRepository.findOne({
+    where: {
+      account: {
+        id: accountId,
+      },
       id: financeId,
-    })
-    .getOne();
+    },
+    relations: {
+      account: true,
+      financesCategory: {
+        category: true,
+      },
+    },
+  });
 
   if (!finance) {
     throw new AppError("It is not possible to change this finance", 401);
   }
 
-  if (finance.isTransference) {
-    throw new AppError("It is not possible to change this finance", 401);
-  }
-
-  const categoriesRepo = AppDataSource.getRepository(Category);
-  const categoriesName = data.category.map((cat) => cat.name);
-  const categoriesId = data.category.map((cat) => cat.id);
-
-  const findedCategories = await categoriesRepo
-    .createQueryBuilder("category")
-    .where("category.name IN (:...name) OR category.id IN (:...id)", { name: categoriesName, id: categoriesId })
-    .getMany();
-
   const finCatRepo = AppDataSource.getRepository(Finances_categories);
 
-  const finCats = findedCategories.map((cat) => {
-    const newFinCat = finCatRepo.create({
-      finance: finance,
-      category: cat,
-    });
-    return newFinCat;
-  });
+  const financeCategoriesList = async (categories): Promise<Finances_categories[]> => {
+    let finCat;
+    if (categories) {
+      const categoriesRepo = AppDataSource.getRepository(Category);
+      const categoriesName = categories.map((cat) => cat.name);
+      const categoriesId = categories.map((cat) => cat.id);
 
-  await finCatRepo.save(finCats);
+      const findedCategories = await categoriesRepo
+        .createQueryBuilder("category")
+        .where("category.name IN (:...name) OR category.id IN (:...id)", { name: categoriesName, id: categoriesId })
+        .getMany();
+
+      finCat = findedCategories.map((cat) => {
+        const newFinCat = finCatRepo.create({
+          finance: finance,
+          category: cat,
+        });
+        return newFinCat;
+      });
+    } else {
+      finCat = finance.financesCategory.map((cat) => {
+        const newFinCat = finCatRepo.create({
+          category: cat.category,
+          finance: finance,
+        });
+
+        return newFinCat;
+      });
+    }
+
+    return finCat;
+  };
+
+  const finCat = await financeCategoriesList(data.category);
+
+  await finCatRepo.save(finCat);
 
   const updateFinance = financeRepository.create({
     ...finance,
     ...data,
-    financesCategory: finCats,
+    financesCategory: finCat,
   });
 
   await financeRepository.save(updateFinance);
