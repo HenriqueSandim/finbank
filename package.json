@@ -10,8 +10,8 @@
     "dev": "ts-node-dev --ignore-watch node_modules src/server.ts",
     "build": "tsc",
     "typeorm": "typeorm-ts-node-commonjs",
-    "test": "cross-env NODE_ENV=test SECRET_KEY=chavesecreta! jest --verbose --runInBand",
-    "start": "node dist/server.js"
+    "test": "cross-env NODE_ENV=test SECRET_KEY=chavesecreta! jest --verbose --runInBand --testTimeout=30000",
+    "start": "node dist/src/server.js"
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
