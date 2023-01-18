@@ -336,8 +336,6 @@ Dados de envio
 }
 ```
 
-### 1.5. Upload da foto do user - ("/users/image") - POST - autenticada 🔐
-
 ### 1.6. Deleção de usuários - ("/users/:id") - DELETE - autenticada 🔐
 
 Voltar aos [EndPoints - 🔙](#3-endpoints)
@@ -373,6 +371,35 @@ Voltar aos [EndPoints - 🔙](#3-endpoints)
 	"name": "Maria José Silva",
 	"id": "deede2cb-6d14-4140-92a1-dcfbc560a04e"
   }
+```
+
+### 1.8. Upar imagem de perfil - ("/users/image") - POST - autenticada 🔐
+
+Voltar aos [EndPoints - 🔙](#3-endpoints)
+
+Envia uma imagem ".jpg" ou ".png" que atualiza a foto do user, qualquer outro tipo de arquivo será recusado. 
+
+Dados: 
+```
+{
+	"image": *Anexo de imagem JPG/PNG*
+}
+```
+
+## ![DER](/src/assets/update-image-example.png)
+
+- Resposta (Sucesso) - status 200
+```
+{
+	"message": "Altered image"
+}
+```
+
+- Resposta (Arquivo inválido) - status 400
+```
+{
+	"message": "Invalid file format"
+}
 ```
 
 ## 2. Login ("/login")
@@ -646,6 +673,8 @@ As Transferências tem as seguintes informações dentro da DataBase:
 
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
+Realiza uma transferência de um user para o outro e envia um comprovante por e-mail.
+
 Dados de envio:
 
 ```
@@ -734,6 +763,8 @@ Voltar aos [EndPoints - 🔙](#3-endpoints)
 ### 4.3. Gerar o pdf de uma transferência - ("/transfer/pdf/:id") - GET - autenticada 🔐
 
 Voltar aos [EndPoints - 🔙](#3-endpoints)
+
+Retorna um pdf da transferência.
 
 - ✅ Resposta (Sucesso) - status: 200
 
