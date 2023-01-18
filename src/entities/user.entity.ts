@@ -37,9 +37,12 @@ class User {
   birthdate: string;
 
   @Column({ unique: true })
-  CPF: string;
+  cpf: string;
 
-  @Column({ default: true })
+  @Column({ nullable: true, default: null })
+  image: string;
+
+  @Column({ default: false })
   isActive: boolean;
 
   @Column({ default: false })

@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { userBalanceService } from "../../middlewares/balance";
+import { userBalanceService } from "../../services/balance";
 
 const userBalanceController = async (req: Request, res: Response) => {
-  const userId = req.user.id;
+  const accountId = req.user.account;
 
-  const balance = await userBalanceService(userId);
+  const balance = await userBalanceService(accountId);
 
   return res.status(200).json(balance);
 };

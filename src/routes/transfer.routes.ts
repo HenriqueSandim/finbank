@@ -1,5 +1,16 @@
 import { Router } from "express";
+import { generatePdfController, requestPdfController } from "../controllers/pdf";
+import { createTransferController, listAllTransfersController } from "../controllers/transfer";
+import { ensureAuthMiddleware } from "../middlewares/auth";
+import schemaValidate from "../middlewares/schemaValidate.middleware";
+import { ensureTransferExistsMiddlware } from "../middlewares/transfer";
+import { transferReqSchema } from "../serializers/transfer.serializers";
 
-const tranferRoutes = Router();
+const transferRoutes = Router();
 
-export default tranferRoutes;
+transferRoutes.post("/:id", ensureAuthMiddleware, schemaValidate(transferReqSchema), createTransferController);
+transferRoutes.get("", ensureAuthMiddleware, listAllTransfersController);
+transferRoutes.get("/pdf/:id", ensureAuthMiddleware, ensureTransferExistsMiddlware, requestPdfController);
+transferRoutes.get("/pdf/generate/:id/:accountid", generatePdfController);
+
+export default transferRoutes;

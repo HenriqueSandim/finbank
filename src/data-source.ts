@@ -12,7 +12,7 @@ const setDataSourceConfig = (): DataSourceOptions => {
       type: "sqlite",
       database: ":memory:",
       synchronize: true,
-      entities: ["src/entities/*.ts"],
+      entities: ["src/entities/*.ts"]
     };
   }
 
@@ -32,7 +32,7 @@ const setDataSourceConfig = (): DataSourceOptions => {
     username: process.env.PGUSER,
     password: process.env.PGPASSWORD,
     database: process.env.PGDATABASE,
-    logging: true,
+    logging: false,
     synchronize: false,
     entities: [entitiesPath],
     migrations: [migrationsPath],
