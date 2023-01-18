@@ -21,29 +21,32 @@ Aqui é possível criar/editar/deletar finanças (despesas e receitas) e criar t
 
 Neste projeto utilizamos diversas librarys para ajudar no desenvolvimento e utilização da aplicação, aqui estão algumas das utilizadas!
 
-- [Node JS](https://nodejs.org/en/docs/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [TypeORM](https://typeorm.io/)
-- [Express](https://expressjs.com/)
-- [Bcrypt](https://www.npmjs.com/package/bcrypt)
-- [Uuid](https://www.npmjs.com/package/uuid)
-- [Cross-env](https://www.npmjs.com/package/cross-env)
-- [Dotenv](https://www.npmjs.com/package/dotenv)
-- [Yup](https://www.npmjs.com/package/yup)
-- [TS-jest](https://www.npmjs.com/package/ts-jest)
-- [Supertest](https://www.npmjs.com/package/supertest)
-- [Sqlite3](https://www.npmjs.com/package/sqlite3)
-- [Jest](https://jestjs.io/pt-BR/)
-- [Reflect-metadata](https://www.npmjs.com/package/reflect-metadata)
-- [Pg](https://www.npmjs.com/package/pg)
-- [JsonWebToken](https://www.npmjs.com/package/jsonwebtoken)
-- [Express-async-errors](https://www.npmjs.com/package/express-async-errors)
-- [CPF-CNPJ-validator](https://www.npmjs.com/package/cpf-cnpj-validator)
+|                                                      |                                                                            |
+| ---------------------------------------------------- | -------------------------------------------------------------------------- |
+| [Node JS](https://nodejs.org/en/docs/)               | [TS-jest](https://www.npmjs.com/package/ts-jest)                           |
+| [TypeScript](https://www.typescriptlang.org/)        | [Supertest](https://www.npmjs.com/package/supertest)                       |
+| [TypeORM](https://typeorm.io/)                       | [Sqlite3](https://www.npmjs.com/package/sqlite3)                           |
+| [Express](https://expressjs.com/)                    | [Jest](https://jestjs.io/pt-BR/)                                           |
+| [Bcrypt](https://www.npmjs.com/package/bcrypt)       | [Reflect-metadata](https://www.npmjs.com/package/reflect-metadata)         |
+| [Uuid](https://www.npmjs.com/package/uuid)           | [Pg](https://www.npmjs.com/package/pg)                                     |
+| [Cross-env](https://www.npmjs.com/package/cross-env) | [JsonWebToken](https://www.npmjs.com/package/jsonwebtoken)                 |
+| [Dotenv](https://www.npmjs.com/package/dotenv)       | [Express-async-errors](https://www.npmjs.com/package/express-async-errors) |
+| [Yup](https://www.npmjs.com/package/yup)             | [CPF-CNPJ-validator](https://www.npmjs.com/package/cpf-cnpj-validator)     |
 
 A URL base da aplicação é:
 https://finbank-api.onrender.com
 
-Importante: as rotas autenticadas (🔐) necessitam da adição de um token na requisição do tipo "Bearer token"
+#### 🚨 Importante
+
+As rotas autenticadas (🔐) necessitam da adição de um token no cabeçalho da requisição do tipo "Bearer token". Caso não seja fornecido, será enviado um erro como:
+
+- Resposta (Proibido) - status: 401
+
+```
+{
+	"message": "jwt must be provided"
+}
+```
 
 ---
 
@@ -100,10 +103,13 @@ Lembrando que é necessário configurar suas váriaveis de ambiente antes de rea
 - [Usuários](#1-usuários)
 - [Login](#2-login-login)
 - [Finanças](#3-finanças)
-- [Transferência] ()
-- [Categorias]()
+- [Transferência](#4-transferências)
+- [Categorias](#5-categorias)
+- [Balanço](#6-balançosaldo)
 
 ## 1. Usuários
+
+Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 Usuários tem as seguintes informações dentro da DataBase:
 | Campo | Tipo | Descrição |
@@ -258,14 +264,6 @@ Dados de envio
 }
 ```
 
-- Respota (Faltando token) - status 401 - Faltando token de autorização para a requisição
-
-```
-{
-  "message": "Missing headers authorization"
-}
-```
-
 #### 1.4. Deleção de usuários - ("/users/:id") - DELETE - autenticada 🔐
 
 - Resposta (Sucesso) - status 204 - no caso de sucesso nenhum corpo é retornado
@@ -275,14 +273,6 @@ Dados de envio
 ```
 {
 	"message": "Requires Admin or Owner permission"
-}
-```
-
-- Respota (Faltando token) - status 401 - Faltando token de autorização para a requisição
-
-```
-{
-  "message": "Missing headers authorization"
 }
 ```
 
@@ -307,15 +297,9 @@ Dados de envio
   }
 ```
 
-- Respota (Faltando token) - status 401 - Faltando token de autorização para a requisição
-
-```
-{
-  "message": "Missing headers authorization"
-}
-```
-
 ## 2. Login ("/login")
+
+Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 Usuários tem as seguintes informações dentro da DataBase:
 | Campo | Tipo | Descrição |
@@ -358,10 +342,12 @@ Dados de envio
 
 ## 3. Finanças
 
+Voltar aos [EndPoints - 🔙](#3-endpoints)
+
 As Finanças tem as seguintes informações dentro da DataBase:
 | Campo | Tipo | Descrição |
 | -------------|---------|-------------------------------------------------|
-| id | string | Identificador único do usuário |
+| id | string | Identificador único da finança |
 | description | string | Descrição da finança. |
 | value | number | O valor da finança (sempre positivo) |
 | isIncome | boolean | Se true é uma receita, se false, uma despesa |
@@ -482,6 +468,14 @@ Obs: Pode-se enviar um campo ou todos os de criação.
 }
 ```
 
+- Resposta (Proibido) - status: 403 - caso a finança que se deseje editar seja do tipo "transferência"
+
+```
+{
+	"message": "cannot change or remove this finance"
+}
+```
+
 ### 3.3. Listar finanças do usuário logado - ("/finances") - GET - autenticada 🔐
 
 - Resposta (sucesso) - status: 200
@@ -541,10 +535,12 @@ Obs: Pode-se enviar um campo ou todos os de criação.
 
 ## 4. Transferências
 
+Voltar aos [EndPoints - 🔙](#3-endpoints)
+
 As Transferências tem as seguintes informações dentro da DataBase:
 | Campo | Tipo | Descrição |
 | -------------|---------|-------------------------------------------------|
-| id | string | Identificador único do usuário |
+| id | string | Identificador único da transferência |
 | description | string | Descrição da transferência. |
 | date | date | Data para efetuar a transferência (feature extra - não está no MVP) |
 | value | number | Valor da transferência |
@@ -650,3 +646,89 @@ Dados de envio:
 Também é enviado um e-mail com o pdf da transferência
 
 ## ![email_transferencia](email_transferencia.png)
+
+## 5. Categorias
+
+Voltar aos [EndPoints - 🔙](#3-endpoints)
+
+As categorias de finanças tem as seguintes informações dentro da DataBase:
+| Campo | Tipo | Descrição |
+| -------------|---------|-------------------------------------------------|
+| id | string | Identificador único da categoria |
+| name | string | Nome da categoria. |
+
+### Rotas
+
+| Método | Rota        | Descrição                              |
+| ------ | ----------- | -------------------------------------- |
+| GET    | /categories | Lista todas as categorias de finanças. |
+
+### 5.1. Lista todas as categorias de finanças - ("/categories") - GET
+
+- Resposta (Sucesso) - status: 201
+
+```
+[
+	{
+		"id": "5cc5ffb6-93c3-4ae7-a80e-2c9caf7a403d",
+		"name": "Compras"
+	},
+	{
+		"id": "ee3b5f10-4b13-43f5-8fa7-d927cfa836cb",
+		"name": "Energia"
+	},
+	{
+		"id": "a929f775-52b6-4beb-bed2-9acd42fc779f",
+		"name": "Água"
+	},
+	{
+		"id": "27086b76-fb35-4255-a82d-7b0e90c96793",
+		"name": "Internet"
+	},
+	{
+		"id": "14142bc2-3d23-4814-823d-23cd6d25091d",
+		"name": "Boletos"
+	},
+	{
+		"id": "c4ad48a3-1c35-4a35-8684-b504564d5057",
+		"name": "Lazer"
+	},
+	{
+		"id": "ffdeef59-f5f8-4790-99f2-5358f6fb2830",
+		"name": "Gasto Mensal"
+	},
+	{
+		"id": "2db40f88-226e-4f8e-8a59-e98308adc10b",
+		"name": "Salário"
+	},
+	{
+		"id": "e86b2e88-cd7c-46a9-b9b9-fa106a6c0ce2",
+		"name": "Transferência"
+	}
+]
+```
+
+## 6. Balanço(saldo)
+
+Voltar aos [EndPoints - 🔙](#3-endpoints)
+
+O saldo da conta tem as seguintes informações dentro da DataBase:
+| Campo | Tipo | Descrição |
+| -------------|---------|-------------------------------------------------|
+| money | number | Saldo da conta do usuário logado |
+
+### Rotas
+
+| Método | Rota     | Descrição                         |
+| ------ | -------- | --------------------------------- |
+| GET    | /balance | Retorna o saldo do usuário logado |
+
+### 6.1. Retorna o saldo do usuário logado - ("/balance") - GET - autenticada 🔐
+
+- Resposta (Sucesso) - status: 200
+
+```
+{
+	"money": 4500
+}
+```
