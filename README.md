@@ -107,6 +107,7 @@ Lembrando que é necessário configurar suas váriaveis de ambiente antes de rea
 	- [Editar usuário](#13-edição-de-usuários---usersid---patch---autenticada-🔐)
 	- [Deletar usuário](#14-deleção-de-usuários---usersid---delete---autenticada-🔐)
 	- [Informações do usuário logado](#15-mostrar-usuário-logado---users---get---autenticada-🔐)
+    - [Upar imagem de perfil do usuário](#16-upar-imagem-de-perfil------post---autenticada-🔐)
 - [Login](#2-login-login)
 	- [Login de usuários](#21-login-de-usuários---login---post)
 - [Finanças](#3-finanças)
@@ -322,6 +323,16 @@ Voltar aos [EndPoints - 🔙](#3-endpoints)
 	"name": "Maria José Silva",
 	"id": "deede2cb-6d14-4140-92a1-dcfbc560a04e"
   }
+```
+
+### 1.6. Upar imagem de perfil - ("/users/image") - POST - autenticada 🔐
+Voltar aos [EndPoints - 🔙](#3-endpoints)
+
+Envia uma imagem ".jpg" ou ".png" que atualiza a foto do user, qualquer outro tipo de arquivo será recusado. 
+ 
+- Resposta (Sucesso) - status 200
+```
+
 ```
 
 ## 2. Login ("/login")
