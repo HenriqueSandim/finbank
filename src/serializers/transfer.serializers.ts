@@ -9,15 +9,21 @@ export const transferReqSchema: SchemaOf<ITransferRequest> = yup.object().shape(
     .string()
     .transform((date) => date.replace(/[-]/g, "/"))
     .test("Date is Valid", "Date format is invalid, format is yyyy/mm/dd", (date) => {
-      const insertDate = new Date(date);
-      return !`${insertDate}`.toLowerCase().includes("invalid") && date.split("/")[0].length == 4;
+      if (date) {
+        const insertDate = new Date(date);
+        return !`${insertDate}`.toLowerCase().includes("invalid") && date.split("/")[0].length == 4;
+      }
+      return true;
     })
     .test("isValidTransferDate", "Date must be today or after", (date) => {
-      const todayData = new Date().toISOString().split("T")[0];
-      const today = new Date(todayData);
-      const tranferDate = new Date(date);
-      const dateTimeDifference = today.getTime() - tranferDate.getTime();
-      return dateTimeDifference <= 0;
+      if (date) {
+        const todayData = new Date().toISOString().split("T")[0];
+        const today = new Date(todayData);
+        const tranferDate = new Date(date);
+        const dateTimeDifference = today.getTime() - tranferDate.getTime();
+        return dateTimeDifference <= 0;
+      }
+      return true;
     })
     .notRequired(),
 });

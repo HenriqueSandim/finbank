@@ -18,6 +18,7 @@ const confirmUserEmailService = async (userId): Promise<string> => {
   await userRepo.save({
     ...user,
     isActive: true,
+    deletedAt: null,
   });
 
   return "User actived";

@@ -21,8 +21,6 @@ export const createFinanceSchema: SchemaOf<Omit<IFinanceRequest, "error">> = yup
 
 export const updateFinanceSchema: SchemaOf<Omit<IFinanceUpdate, "error">> = yup.object().shape({
   description: yup.string(),
-  value: yup.number(),
-  isIncome: yup.boolean(),
   category: yup.array().of(validCategorySchema),
 });
 

@@ -30,8 +30,6 @@ export interface IFinanceResponse {
 
 export interface IFinanceUpdate {
   description?: string;
-  value?: number;
-  isIncome?: boolean;
   category?: ICategoryRequest[];
   error?: {
     message?: string;

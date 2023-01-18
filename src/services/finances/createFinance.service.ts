@@ -4,6 +4,7 @@ import Category from "../../entities/category.entity";
 import Finance from "../../entities/finance.entity";
 import Finances_categories from "../../entities/finance_category.entity";
 import User from "../../entities/user.entity";
+import AppError from "../../errors/AppError";
 import { IFinanceResponse, IFinanceTransfRequest } from "../../interfaces/finances.interfaces";
 
 const createFinanceService = async (body: IFinanceTransfRequest, userId: string): Promise<IFinanceResponse> => {
@@ -13,6 +14,10 @@ const createFinanceService = async (body: IFinanceTransfRequest, userId: string)
     where: { id: userId },
     relations: { account: true },
   });
+
+  if (body.value <= 0) {
+    throw new AppError("invalid value");
+  }
 
   //Alterar o valor da conta
   if (body.isIncome) {

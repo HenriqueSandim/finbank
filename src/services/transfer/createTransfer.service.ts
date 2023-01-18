@@ -17,6 +17,10 @@ const createTransferService = async (
   const transferRepo = AppDataSource.getRepository(Transference);
   const accountRepo = AppDataSource.getRepository(Account);
 
+  if (dataTransfer.value <= 0) {
+    throw new AppError("invalid value");
+  }
+
   const receiverAccount = await accountRepo.findOne({
     where: {
       id: receivedAccountId,
@@ -24,10 +28,15 @@ const createTransferService = async (
     relations: {
       user: true,
     },
+    withDeleted: true,
   });
 
   if (!receiverAccount) {
     throw new AppError("account not found", 404);
+  }
+
+  if (!receiverAccount.user.isActive) {
+    throw new AppError("receiver account is desactive");
   }
 
   const senderAccount = await accountRepo.findOne({
@@ -69,19 +78,23 @@ const createTransferService = async (
   });
   await transferRepo.save(newTransfer);
 
-  const pdf = await requestPdfService(newTransfer.id, senderAccountId);
-  await sendEmailService({
-    subject: "Comprovante de Transferência",
-    text: "",
-    to: senderAccount.user.email,
-    file: pdf,
-  });
-  await sendEmailService({
-    subject: "Comprovante de Transferência",
-    text: "",
-    to: receiverAccount.user.email,
-    file: pdf,
-  });
+  if (process.env.NODE_ENV === "test") {
+    null;
+  } else {
+    const pdf = await requestPdfService(newTransfer.id, senderAccountId);
+    await sendEmailService({
+      subject: "Comprovante de Transferência",
+      text: "",
+      to: senderAccount.user.email,
+      file: pdf,
+    });
+    await sendEmailService({
+      subject: "Comprovante de Transferência",
+      text: "",
+      to: receiverAccount.user.email,
+      file: pdf,
+    });
+  }
 
   const transferWithoutMoney = tranferResSchema.validateSync(newTransfer, {
     stripUnknown: true,
