@@ -587,6 +587,8 @@ As Transferências tem as seguintes informações dentro da DataBase:
 ### 4.1. Criar uma transferência - ("/transfer/:receiverAccount_id") - POST - autenticada 🔐
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
+Realiza uma transferência de um user para o outro e envia um comprovante por e-mail.
+
 Dados de envio:
 
 ```
@@ -614,6 +616,8 @@ Dados de envio:
 	"id": "f760e6af-d448-4514-be81-2e9f1248421d"
 }
 ```
+
+![email_transferencia](email_transferencia.png)
 
 - ❌ Resposta (Proibido) - status: 401 - No caso de não haver dinheiro suficiente
 
@@ -670,13 +674,12 @@ Voltar aos [EndPoints - 🔙](#3-endpoints)
 ### 4.3. Gerar o pdf de uma transferência - ("/transfer/pdf/:id") - GET - autenticada 🔐
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
+Retorna um pdf da transferência.
+
 - ✅ Resposta (Sucesso) - status: 200
 
 ![transferencia](transferencia.png)
 
-Também é enviado um e-mail com o pdf da transferência
-
-![email_transferencia](email_transferencia.png)
 
 ## 5. Categorias
 Voltar aos [EndPoints - 🔙](#3-endpoints)
