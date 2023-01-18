@@ -336,8 +336,6 @@ Dados de envio
 }
 ```
 
-### 1.5. Upload da foto do user - ("/users/image") - POST - autenticada 🔐
-
 ### 1.6. Deleção de usuários - ("/users/:id") - DELETE - autenticada 🔐
 
 Voltar aos [EndPoints - 🔙](#3-endpoints)
@@ -380,10 +378,28 @@ Voltar aos [EndPoints - 🔙](#3-endpoints)
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 Envia uma imagem ".jpg" ou ".png" que atualiza a foto do user, qualquer outro tipo de arquivo será recusado. 
- 
-- Resposta (Sucesso) - status 200
+
+Dados: 
+```
+{
+	"image": *Anexo de imagem JPG/PNG*
+}
 ```
 
+## ![DER](/src/assets/update-image-example.png)
+
+- Resposta (Sucesso) - status 200
+```
+{
+	"message": "Altered image"
+}
+```
+
+- Resposta (Arquivo inválido) - status 400
+```
+{
+	"message": "Invalid file format"
+}
 ```
 
 ## 2. Login ("/login")
