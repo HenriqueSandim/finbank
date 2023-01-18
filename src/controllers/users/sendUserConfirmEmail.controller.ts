@@ -6,6 +6,6 @@ const sendUserConfirmEmailController = async (req: Request, res: Response) => {
   const activeData: IActiveRequest = req.body;
   const data = await sendUserConfirmEmailService(activeData);
 
-  return res.status(201).json(data);
+  return res.status(201).json({ message: data });
 };
 export default sendUserConfirmEmailController;
