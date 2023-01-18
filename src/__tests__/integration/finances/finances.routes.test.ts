@@ -139,11 +139,13 @@ describe("Create user route test", () => {
     expect(response.body).toHaveProperty("description");
     expect(response.body.description).toEqual("Test finance att");
     expect(response.body).toHaveProperty("value");
-    expect(response.body.value).toEqual(700);
+    expect(response.body.value).toEqual(1000);
     expect(response.body).toHaveProperty("isIncome");
-    expect(response.body.isIncome).toEqual(false);
+    expect(response.body.isIncome).toEqual(true);
     expect(response.body).toHaveProperty("isTransference");
     expect(response.body).toHaveProperty("createdAt");
+    expect(response.body.financesCategory[0].category.name).toEqual("Internet");
+    expect(response.body.financesCategory).toHaveLength(1);
     expect(response.status).toBe(200);
   });
 
