@@ -35,7 +35,6 @@ financesRoutes.delete(
   "/:id",
   ensureAuthMiddleware,
   ensureFinanceExistsMiddleware,
-  ensureAdmOwnerAuthMiddleware,
   ensureFinanceIsTranferenceMiddleware,
   deleteFinanceController
 );
