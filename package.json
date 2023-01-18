@@ -10,8 +10,8 @@
     "dev": "ts-node-dev --ignore-watch node_modules src/server.ts",
     "build": "tsc",
     "typeorm": "typeorm-ts-node-commonjs",
-    "test": "cross-env NODE_ENV=test SECRET_KEY=chavesecreta! jest --verbose --runInBand",
-    "start": "node dist/server.js"
+    "test": "cross-env NODE_ENV=test SECRET_KEY=chavesecreta! jest --verbose --runInBand --testTimeout=30000",
+    "start": "node dist/src/server.js"
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -41,7 +41,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.0",
     "pg": "^8.7.3",
-    "puppeteer": "^19.5.2",
+    "puppeteer": "16.2.0",
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.0.8",
     "supertest": "^6.2.4",

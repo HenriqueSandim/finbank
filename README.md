@@ -53,7 +53,7 @@ As rotas autenticadas (🔐) necessitam da adição de um token no cabeçalho da
 
 ### 1.2 Diagrama ER
 
-## ![DER](DER.png)
+## ![DER](/src/assets/DER.png)
 
 ## 2. Iniciando no projeto
 
@@ -102,46 +102,52 @@ Lembrando que é necessário configurar suas váriaveis de ambiente antes de rea
 ### Índice
 
 - [Usuários](#1-usuários)
-	- [Criar usuário](#11-criar-usuário-users---post)
-	- [Ativar usuário](#12-ativação-de-novos-usuários-usersactiveid---get)
-	- [Editar usuário](#13-edição-de-usuários---usersid---patch---autenticada-🔐)
-	- [Deletar usuário](#14-deleção-de-usuários---usersid---delete---autenticada-🔐)
-	- [Informações do usuário logado](#15-mostrar-usuário-logado---users---get---autenticada-🔐)
-    - [Upar imagem de perfil do usuário](#16-upar-imagem-de-perfil------post---autenticada-🔐)
+
+  - [Criar usuário](#11-criar-usuário-users---post)
+  - [Ativar usuário](#12-ativação-de-novos-usuários-usersactiveid---get)
+
+  - [Enviar email de ativação](#13-enviar-email-de-ativação-para-usuário-usersactive---post)
+
+  - [Editar usuário](#14-edição-de-usuários---usersid---patch---autenticada-🔐)
+  - [Upload da foto do user](#15-upload-da-foto-do-user---usersimage---post---autenticada-🔐)
+  - [Deletar usuário](#16-deleção-de-usuários---usersid---delete---autenticada-🔐)
+  - [Informações do usuário logado](#17-mostrar-usuário-logado---users---get---autenticada-🔐)
+
 - [Login](#2-login-login)
-	- [Login de usuários](#21-login-de-usuários---login---post)
+  - [Login de usuários](#21-login-de-usuários---login---post)
 - [Finanças](#3-finanças)
-	- [Criar uma finança](#31-criação-de-uma-finança---finances---post---autenticada-🔐)
-	- [Editar finança](#32-edição-de-uma-finança---financesfinance_id---patch---autenticada-🔐)
-	- [Listar finanças](#33-listar-finanças-do-usuário-logado---finances---get---autenticada-🔐)
-	- [Deletar finanças](#34-deletar-uma-finança---financesfinance_id---delete---autenticada-🔐)
+  - [Criar uma finança](#31-criação-de-uma-finança---finances---post---autenticada-🔐)
+  - [Editar finança](#32-edição-de-uma-finança---financesfinance_id---patch---autenticada-🔐)
+  - [Listar finanças](#33-listar-finanças-do-usuário-logado---finances---get---autenticada-🔐)
+  - [Deletar finanças](#34-deletar-uma-finança---financesfinance_id---delete---autenticada-🔐)
 - [Transferência](#4-transferências)
-	- [Criar transferência](#41-criar-uma-transferência---transferreceiveraccount_id---post---autenticada-🔐)
-	- [Listar transferências](#42-listar-transferências-realizadas-pelo-usuário-logado---transfer---get---autenticada-🔐)
-	- [Gerar PDF de transferência](#43-gerar-o-pdf-de-uma-transferência---transferpdfid---get---autenticada-🔐)
+  - [Criar transferência](#41-criar-uma-transferência---transferreceiveraccount_id---post---autenticada-🔐)
+  - [Listar transferências](#42-listar-transferências-realizadas-pelo-usuário-logado---transfer---get---autenticada-🔐)
+  - [Gerar PDF de transferência](#43-gerar-o-pdf-de-uma-transferência---transferpdfid---get---autenticada-🔐)
 - [Categorias](#5-categorias)
-	- [Listar categorias](#51-lista-todas-as-categorias-de-finanças---categories---get)
+  - [Listar categorias](#51-lista-todas-as-categorias-de-finanças---categories---get)
 - [Balanço](#6-balançosaldo)
-	- [Verificar saldo da conta](#61-retorna-o-saldo-do-usuário-logado---balance---get---autenticada-🔐)
+  - [Verificar saldo da conta](#61-retorna-o-saldo-do-usuário-logado---balance---get---autenticada-🔐)
 
 ## 1. Usuários
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 Usuários tem as seguintes informações dentro da DataBase:
-| Campo 		| Tipo 		| Descrição 									|
+| Campo | Tipo | Descrição |
 |---------------|-----------|-----------------------------------------------|
-| id 			| string 	| Identificador único do usuário 				|
-| name 			| string 	| O nome do usuário. 							|
-| email 		| string 	| O e-mail do usuário. 							|
-| password 		| string 	| A senha de acesso do usuário 					|
-| birthdate 	| date 		| Data de nascimento do usuário. 				|
-| CPF 			| string 	| Documento de identificação do usuário. 		|
-| isActive 		| boolean 	| Status de ativo ou não do usuário. 			|
-| isAdmin 		| boolean 	| Nível de permissão do usuário. 				|
-| createdAt 	| date 		| Data indicando quando a conta foi criada. 	|
-| updatedAt 	| date 		| Data indicando a última atualização da conta. |
-| deletedAt 	| date 		| Data indicando a deleção da conta. 			|
-| accountId 	| string 	| Identificador ligado a account do usuário. 	|
+| id | string | Identificador único do usuário |
+| name | string | O nome do usuário. |
+| email | string | O e-mail do usuário. |
+| password | string | A senha de acesso do usuário |
+| birthdate | date | Data de nascimento do usuário. |
+| CPF | string | Documento de identificação do usuário. |
+| isActive | boolean | Status de ativo ou não do usuário. |
+| isAdmin | boolean | Nível de permissão do usuário. |
+| createdAt | date | Data indicando quando a conta foi criada. |
+| updatedAt | date | Data indicando a última atualização da conta. |
+| deletedAt | date | Data indicando a deleção da conta. |
+| accountId | string | Identificador ligado a account do usuário. |
 
 ### Rotas
 
@@ -153,6 +159,7 @@ Usuários tem as seguintes informações dentro da DataBase:
 | GET    | /users/         | Lista as informações do usuário logado. |
 
 ### 1.1. Criar usuário ("/users") - POST
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 Dados de envio
@@ -210,14 +217,15 @@ Dados de envio
  }
 ```
 
-### 1.2. Ativação de novos usuários ("users/active/:id") - GET
-Voltar aos [EndPoints - 🔙](#3-endpoints)
-
 - Após a criação do usuário, será enviado um email para ativação da conta 📩
 
-![EMAIL](confirmacao_email.png)
+![EMAIL](src/assets/confirm_email.png)
 
 - Porém é possível ativar a conta através dessa rota
+
+### 1.2. Ativação de novos usuários ("users/active/:id") - GET
+
+Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 - ✅ Resposta (Sucesso) - status 200
 
@@ -227,7 +235,44 @@ Voltar aos [EndPoints - 🔙](#3-endpoints)
 }
 ```
 
-### 1.3. Edição de usuários - ("/users/:id") - PATCH - autenticada 🔐
+### 1.3. Enviar email de ativação para usuário ("users/active") - POST
+
+Voltar aos [EndPoints - 🔙](#3-endpoints)
+
+Dados de envio
+
+```
+  {
+    "email": "mariajosesilva@gmail.com"
+  }
+```
+
+Ou
+
+```
+  {
+    "cpf": "904.245.020-70"
+  }
+```
+
+- ✅ Resposta (Sucesso) - status 201
+
+```
+  {
+    "message": "Email successfully sent"
+  }
+```
+
+- ❌ Resposta (Serviço fora do ar) - status 503 - caso o serviço de email verifique alguma inconsistência:
+
+```
+{
+	"message": "Error sending email, try again in a moment"
+}
+```
+
+### 1.4. Edição de usuários - ("/users/:id") - PATCH - autenticada 🔐
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 | Campo editável | Tipo   | Descrição                    |
@@ -281,16 +326,20 @@ Dados de envio
 {
 	"message": "Requires Admin or Owner permission"
 }
-  ```
+```
 
 - Respota (Faltando token) - status 401 - Faltando token de autorização para a requisição
+
 ```
 {
   "message": "Missing headers authorization"
 }
 ```
 
-### 1.4. Deleção de usuários - ("/users/:id") - DELETE - autenticada 🔐
+### 1.5. Upload da foto do user - ("/users/image") - POST - autenticada 🔐
+
+### 1.6. Deleção de usuários - ("/users/:id") - DELETE - autenticada 🔐
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 - ✅ Resposta (Sucesso) - status 204 - no caso de sucesso nenhum corpo é retornado
@@ -303,7 +352,8 @@ Voltar aos [EndPoints - 🔙](#3-endpoints)
 }
 ```
 
-### 1.5. Mostrar usuário logado - ("/users") - GET - autenticada 🔐
+### 1.7. Mostrar usuário logado - ("/users") - GET - autenticada 🔐
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 - ✅ Resposta (sucesso) - status: 201
@@ -325,7 +375,8 @@ Voltar aos [EndPoints - 🔙](#3-endpoints)
   }
 ```
 
-### 1.6. Upar imagem de perfil - ("/users/image") - POST - autenticada 🔐
+### 1.8. Upar imagem de perfil - ("/users/image") - POST - autenticada 🔐
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 Envia uma imagem ".jpg" ou ".png" que atualiza a foto do user, qualquer outro tipo de arquivo será recusado. 
@@ -336,13 +387,14 @@ Envia uma imagem ".jpg" ou ".png" que atualiza a foto do user, qualquer outro ti
 ```
 
 ## 2. Login ("/login")
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 Usuários tem as seguintes informações dentro da DataBase:
-| Campo 		| Tipo 		| Descrição 										|
+| Campo | Tipo | Descrição |
 | --------------|-----------|---------------------------------------------------|
-| email 		| string 	| O e-mail do usuário. 								|
-| password 		| string 	| A senha de acesso do usuário 						|
+| email | string | O e-mail do usuário. |
+| password | string | A senha de acesso do usuário |
 
 ### Rotas
 
@@ -351,6 +403,7 @@ Usuários tem as seguintes informações dentro da DataBase:
 | POST   | /login | Login de um usuário. |
 
 ### 2.1. Login de usuários - ("/login") - POST
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 Dados de envio
@@ -379,20 +432,21 @@ Dados de envio
 ```
 
 ## 3. Finanças
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 As Finanças tem as seguintes informações dentro da DataBase:
-| Campo 			| Tipo 		| Descrição 										|
+| Campo | Tipo | Descrição |
 | ------------------|-----------|---------------------------------------------------|
-| id 				| string 	| Identificador único da finança 					|
-| description 		| string 	| Descrição da finança. 							|
-| value 			| number 	| O valor da finança (sempre positivo) 				|
-| isIncome 			| boolean 	| Se true é uma receita, se false, uma despesa 		|
-| isTransference 	| boolean 	| Se veio de uma transferência 						|
-| createdAt 		| date 		| Data indicando quando a finança foi criada. 		|
-| updatedAt 		| date 		| Data indicando a última atualização da finança. 	|
-| deletedAt 		| date 		| Data indicando a deleção da finança. 				|
-| accountId 		| string 	| Identificador ligado a account do usuário. 		|
+| id | string | Identificador único da finança |
+| description | string | Descrição da finança. |
+| value | number | O valor da finança (sempre positivo) |
+| isIncome | boolean | Se true é uma receita, se false, uma despesa |
+| isTransference | boolean | Se veio de uma transferência |
+| createdAt | date | Data indicando quando a finança foi criada. |
+| updatedAt | date | Data indicando a última atualização da finança. |
+| deletedAt | date | Data indicando a deleção da finança. |
+| accountId | string | Identificador ligado a account do usuário. |
 
 ### Rotas
 
@@ -404,6 +458,7 @@ As Finanças tem as seguintes informações dentro da DataBase:
 | DELETE | /finances/:finance_id | Deleta uma finança                   |
 
 ### 3.1. Criação de uma finança - ("/finances") - POST - autenticada 🔐
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 Dados de envio -
@@ -456,6 +511,7 @@ Obs: em "category" pode-se enviar tanto o id da categoria, quanto o nome.
 ```
 
 ### 3.2. Edição de uma finança - ("/finances/:finance_id") - PATCH - autenticada 🔐
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 Dados de envio -
@@ -516,6 +572,7 @@ Obs: Pode-se enviar um campo ou todos os de criação.
 ```
 
 ### 3.3. Listar finanças do usuário logado - ("/finances") - GET - autenticada 🔐
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 - ✅ Resposta (sucesso) - status: 200
@@ -574,18 +631,19 @@ Voltar aos [EndPoints - 🔙](#3-endpoints)
 ```
 
 ## 4. Transferências
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 As Transferências tem as seguintes informações dentro da DataBase:
-| Campo 			| Tipo 			| Descrição 																|
+| Campo | Tipo | Descrição |
 | ------------------|---------------|---------------------------------------------------------------------------|
-| id 				| string 		| Identificador único da transferência 										|
-| description 		| string 		| Descrição da transferência. 												|
-| date 				| date 			| Data para efetuar a transferência (feature extra - não está no MVP) 		|
-| value 			| number 		| Valor da transferência 													|
-| createdAt 		| date 			| Data indicando quando a transferência foi criada. 						|
-| senderAccount 	| {id: number} 	| Identificador ligado a account do usuário que envia a transferência 		|
-| receiverAccount 	| {id: number} 	| Identificador ligado a account do usuário que recebe a transferência. 	|
+| id | string | Identificador único da transferência |
+| description | string | Descrição da transferência. |
+| date | date | Data para efetuar a transferência (feature extra - não está no MVP) |
+| value | number | Valor da transferência |
+| createdAt | date | Data indicando quando a transferência foi criada. |
+| senderAccount | {id: number} | Identificador ligado a account do usuário que envia a transferência |
+| receiverAccount | {id: number} | Identificador ligado a account do usuário que recebe a transferência. |
 
 ### Rotas
 
@@ -596,6 +654,7 @@ As Transferências tem as seguintes informações dentro da DataBase:
 | GET    | /transfer/pdf/:id             | Gera o pdf de uma transferência passada por id                            |
 
 ### 4.1. Criar uma transferência - ("/transfer/:receiverAccount_id") - POST - autenticada 🔐
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 Realiza uma transferência de um user para o outro e envia um comprovante por e-mail.
@@ -628,7 +687,9 @@ Dados de envio:
 }
 ```
 
-![email_transferencia](email_transferencia.png)
+- Também é enviado um email para quem manda e quem recebe a transferência contendo um comprovante em PDF
+
+![email_transferencia](src/assets/email_transferencia.png)
 
 - ❌ Resposta (Proibido) - status: 401 - No caso de não haver dinheiro suficiente
 
@@ -660,6 +721,7 @@ Dados de envio:
 ```
 
 ### 4.2. Listar transferências realizadas pelo usuário logado - ("/transfer") - GET - autenticada 🔐
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 - ✅ Resposta (Sucesso) - status: 201
@@ -683,23 +745,24 @@ Voltar aos [EndPoints - 🔙](#3-endpoints)
 ```
 
 ### 4.3. Gerar o pdf de uma transferência - ("/transfer/pdf/:id") - GET - autenticada 🔐
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 Retorna um pdf da transferência.
 
 - ✅ Resposta (Sucesso) - status: 200
 
-![transferencia](transferencia.png)
-
+![transferencia](src/assets/transferencia.png)
 
 ## 5. Categorias
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 As categorias de finanças tem as seguintes informações dentro da DataBase:
-| Campo 		| Tipo 		| Descrição 										|
+| Campo | Tipo | Descrição |
 | --------------|-----------|---------------------------------------------------|
-| id 			| string 	| Identificador único da categoria 					|
-| name 			| string 	| Nome da categoria. 								|
+| id | string | Identificador único da categoria |
+| name | string | Nome da categoria. |
 
 ### Rotas
 
@@ -708,6 +771,7 @@ As categorias de finanças tem as seguintes informações dentro da DataBase:
 | GET    | /categories | Lista todas as categorias de finanças. |
 
 ### 5.1. Lista todas as categorias de finanças - ("/categories") - GET
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 - ✅ Resposta (Sucesso) - status: 201
@@ -769,6 +833,7 @@ O saldo da conta tem as seguintes informações dentro da DataBase:
 | GET    | /balance | Retorna o saldo do usuário logado |
 
 ### 6.1. Retorna o saldo do usuário logado - ("/balance") - GET - autenticada 🔐
+
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
 - ✅ Resposta (Sucesso) - status: 200

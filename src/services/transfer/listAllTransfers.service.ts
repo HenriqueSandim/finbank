@@ -1,30 +1,23 @@
 import AppDataSource from "../../data-source";
-import Account from "../../entities/account.entity";
 import Transference from "../../entities/transference.entity";
 import { ITransferResponse } from "../../interfaces/transfer.interfaces";
 import { tranferResSchema } from "../../serializers/transfer.serializers";
 
 const listAllTransfersService = async (userAccountId: number): Promise<ITransferResponse[]> => {
-  const accountRepo = AppDataSource.getRepository(Account);
+  const tranferencesRepo = AppDataSource.getRepository(Transference);
 
-  const account = await accountRepo.findOne({
-    where: {
-      id: userAccountId,
-    },
-    relations: {
-      transference: {
-        receiverAccount: true,
-        senderAccount: true,
-      },
-    },
-  });
+  const tranferences = await tranferencesRepo
+    .createQueryBuilder("transferences")
+    .innerJoinAndSelect("transferences.receiverAccount", "receiver")
+    .innerJoinAndSelect("transferences.senderAccount", "sender")
+    .where("receiver.id = :receiverid OR sender.id = :senderid", { receiverid: userAccountId, senderid: userAccountId })
+    .getMany();
 
-  const tranferencesWithoutMoney: ITransferResponse[] = await account.transference.map((transf) => {
-    const validatedTransferences = tranferResSchema.validateSync(transf, {
+  const tranferencesWithoutMoney = tranferences.map((transf) => {
+    const transfWithouthMoney = tranferResSchema.validateSync(transf, {
       stripUnknown: true,
     });
-
-    return validatedTransferences;
+    return transfWithouthMoney;
   });
 
   return tranferencesWithoutMoney;
