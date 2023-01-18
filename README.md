@@ -112,6 +112,7 @@ Lembrando que é necessário configurar suas váriaveis de ambiente antes de rea
   - [Upload da foto do user](#15-upload-da-foto-do-user---usersimage---post---autenticada-🔐)
   - [Deletar usuário](#16-deleção-de-usuários---usersid---delete---autenticada-🔐)
   - [Informações do usuário logado](#17-mostrar-usuário-logado---users---get---autenticada-🔐)
+  - [Upload de imagem do usuário](#18-upar-imagem-de-perfil---usersimage---post---autenticada-🔐)
 
 - [Login](#2-login-login)
   - [Login de usuários](#21-login-de-usuários---login---post)
