@@ -35,10 +35,10 @@ const sendUserConfirmEmailService = async (activeData: IActiveRequest): Promise<
     .then((res) => true)
     .catch((err) => false);
 
-  if (sended) {
-    return "Email successfully sent";
+  if (!sended) {
+    throw new AppError("Error sending email, try again in a moment", 503);
   }
-  return "Erro ao enviar o email";
+  return "Email successfully sent";
 };
 
 export default sendUserConfirmEmailService;
