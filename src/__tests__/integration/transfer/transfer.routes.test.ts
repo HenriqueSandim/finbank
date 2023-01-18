@@ -11,16 +11,12 @@ import {
   mockedTransfer,
   mockedUserTransfer,
 } from "../../mocks/transfers.mocks";
-import {
-  mockedUserLogin,
-  mockedUserLogin2,
-  mockedUserRequest,
-  mockedUserRequest2,
-} from "../../mocks/users.mocks";
+import { mockedUserLogin, mockedUserLogin2, mockedUserRequest, mockedUserRequest2 } from "../../mocks/users.mocks";
 
 describe("Transfer route test", () => {
   let con: DataSource;
   const baseUrl: string = "/transfer";
+  const baseUrlUsers: string = "/users";
 
   beforeAll(async () => {
     await AppDataSource.initialize()
@@ -30,9 +26,7 @@ describe("Transfer route test", () => {
     const user = await request(app).post("/users").send(mockedUserRequest);
     const user2 = await request(app).post("/users").send(mockedUserRequest2);
     const confirmUser = await request(app).get(`/users/active/${user.body.id}`);
-    const confirmUser2 = await request(app).get(
-      `/users/active/${user2.body.id}`
-    );
+    const confirmUser2 = await request(app).get(`/users/active/${user2.body.id}`);
 
     await AppDataSource.createQueryBuilder()
       .insert()
@@ -78,10 +72,7 @@ describe("Transfer route test", () => {
   it("POST / Should not be able to transfer value zero", async () => {
     const userLogin = await request(app).post("/login").send(mockedUserLogin);
 
-    await request(app)
-      .post(`/finances`)
-      .set("Authorization", `Bearer ${userLogin.body.token}`)
-      .send(mockedFinance);
+    await request(app).post(`/finances`).set("Authorization", `Bearer ${userLogin.body.token}`).send(mockedFinance);
     const response = await request(app)
       .post(`${baseUrl}/${mockedUserTransfer.receiverAccount}`)
       .set("Authorization", `Bearer ${userLogin.body.token}`)
@@ -94,10 +85,7 @@ describe("Transfer route test", () => {
   it("POST / Should not be able to transfer with invalid date", async () => {
     const userLogin = await request(app).post("/login").send(mockedUserLogin);
 
-    await request(app)
-      .post(`/finances`)
-      .set("Authorization", `Bearer ${userLogin.body.token}`)
-      .send(mockedFinance);
+    await request(app).post(`/finances`).set("Authorization", `Bearer ${userLogin.body.token}`).send(mockedFinance);
     const response = await request(app)
       .post(`${baseUrl}/${mockedUserTransfer.receiverAccount}`)
       .set("Authorization", `Bearer ${userLogin.body.token}`)
@@ -110,10 +98,7 @@ describe("Transfer route test", () => {
   it("POST / Should not be able to transfer with before date", async () => {
     const userLogin = await request(app).post("/login").send(mockedUserLogin);
 
-    await request(app)
-      .post(`/finances`)
-      .set("Authorization", `Bearer ${userLogin.body.token}`)
-      .send(mockedFinance);
+    await request(app).post(`/finances`).set("Authorization", `Bearer ${userLogin.body.token}`).send(mockedFinance);
     const response = await request(app)
       .post(`${baseUrl}/${mockedUserTransfer.receiverAccount}`)
       .set("Authorization", `Bearer ${userLogin.body.token}`)
@@ -125,13 +110,9 @@ describe("Transfer route test", () => {
 
   it("POST / Should not be able to create transference without token", async () => {
     const userLogin = await request(app).post("/login").send(mockedUserLogin);
-    const user = await request(app)
-      .get("/users")
-      .set("Authorization", `Bearer ${userLogin.body.token}`);
+    const user = await request(app).get("/users").set("Authorization", `Bearer ${userLogin.body.token}`);
 
-    const response = await request(app).post(
-      `${baseUrl}/${user.body.account.id}`
-    );
+    const response = await request(app).post(`${baseUrl}/${user.body.account.id}`);
 
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(401);
@@ -151,15 +132,13 @@ describe("Transfer route test", () => {
 
   it("POST / Should not be able to transfer to inactive user", async () => {
     const user2Login = await request(app).post("/login").send(mockedUserLogin2);
+    const user2 = await request(app).get("/users").set("Authorization", `Bearer ${user2Login.body.token}`);
     await request(app)
-      .delete(`${baseUrl}/${mockedUserTransfer.receiverAccount}`)
+      .delete(`${baseUrlUsers}/${user2.body.id}`)
       .set("Authorization", `Bearer ${user2Login.body.token}`);
 
     const userLogin = await request(app).post("/login").send(mockedUserLogin);
-    await request(app)
-      .post(`/finances`)
-      .set("Authorization", `Bearer ${userLogin.body.token}`)
-      .send(mockedFinance);
+    await request(app).post(`/finances`).set("Authorization", `Bearer ${userLogin.body.token}`).send(mockedFinance);
 
     const response = await request(app)
       .post(`${baseUrl}/${mockedUserTransfer.receiverAccount}`)
@@ -173,9 +152,7 @@ describe("Transfer route test", () => {
   it("GET / Should list user transfers", async () => {
     const userLogin = await request(app).post("/login").send(mockedUserLogin);
 
-    const response = await request(app)
-      .get(`${baseUrl}`)
-      .set("Authorization", `Bearer ${userLogin.body.token}`);
+    const response = await request(app).get(`${baseUrl}`).set("Authorization", `Bearer ${userLogin.body.token}`);
 
     expect(response.body).toHaveLength(1);
     expect(response.status).toBe(200);
@@ -183,9 +160,7 @@ describe("Transfer route test", () => {
 
   it("GET / Should not be able to list transference without token", async () => {
     const userLogin = await request(app).post("/login").send(mockedUserLogin);
-    const user = await request(app)
-      .get("/users")
-      .set("Authorization", `Bearer ${userLogin.body.token}`);
+    const user = await request(app).get("/users").set("Authorization", `Bearer ${userLogin.body.token}`);
 
     const response = await request(app).get(`${baseUrl}`);
 

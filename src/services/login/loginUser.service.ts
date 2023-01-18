@@ -12,16 +12,17 @@ const loginUserService = async (data: ILoginRequest): Promise<string> => {
     relations: {
       account: true,
     },
+    withDeleted: true,
   });
 
   if (!user) {
-    throw new AppError("Incorrect user", 403);
+    throw new AppError("Incorrect user", 400);
   }
 
   const passwordMatch = await compare(data.password, user.password);
 
   if (!passwordMatch) {
-    throw new AppError("Incorrect user", 403);
+    throw new AppError("Incorrect user", 400);
   }
 
   if (!user.isActive) {

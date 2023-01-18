@@ -46,9 +46,7 @@ const sendEmailService = async ({ subject, text, to, file, html }: IEmailRequest
   });
   await transporter
     .sendMail(mailContent())
-    .then(() => {
-      console.log("Email send with success");
-    })
+    .then(() => {})
     .catch((err) => {
       console.log(err);
       throw new AppError("Error sending email, try again later");

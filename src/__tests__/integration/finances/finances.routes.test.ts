@@ -2,12 +2,7 @@ import request from "supertest";
 import { DataSource } from "typeorm";
 import AppDataSource from "../../../data-source";
 import app from "../../../app";
-import {
-  mockedUserLogin,
-  mockedUserLogin2,
-  mockedUserRequest,
-  mockedUserRequest2,
-} from "../../mocks/users.mocks";
+import { mockedUserLogin, mockedUserLogin2, mockedUserRequest, mockedUserRequest2 } from "../../mocks/users.mocks";
 import { mockedFinance, mockedFinanceUpdate } from "../../mocks/finances.mocks";
 import Category from "../../../entities/category.entity";
 
@@ -23,9 +18,7 @@ describe("Create user route test", () => {
     const user = await request(app).post("/users").send(mockedUserRequest);
     const user2 = await request(app).post("/users").send(mockedUserRequest2);
     const confirmUser = await request(app).get(`/users/active/${user.body.id}`);
-    const confirmUser2 = await request(app).get(
-      `/users/active/${user2.body.id}`
-    );
+    const confirmUser2 = await request(app).get(`/users/active/${user2.body.id}`);
 
     await AppDataSource.createQueryBuilder()
       .insert()
@@ -97,8 +90,7 @@ describe("Create user route test", () => {
     const response = await request(app)
       .post(baseUrl)
       .send({ ...mockedFinance, value: -10 })
-      .set("Authotization", `Bearer ${userLogin.body.token}`);
-
+      .set("Authorization", `Bearer ${userLogin.body.token}`);
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(400);
   });
@@ -109,7 +101,7 @@ describe("Create user route test", () => {
     const response = await request(app)
       .post(baseUrl)
       .send({ ...mockedFinance, value: 0 })
-      .set("Authotization", `Bearer ${userLogin.body.token}`);
+      .set("Authorization", `Bearer ${userLogin.body.token}`);
 
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(400);
@@ -118,9 +110,7 @@ describe("Create user route test", () => {
   it("GET / Should be able to list user finances", async () => {
     const userLogin = await request(app).post("/login").send(mockedUserLogin);
 
-    const response = await request(app)
-      .get(baseUrl)
-      .set("Authorization", `Bearer ${userLogin.body.token}`);
+    const response = await request(app).get(baseUrl).set("Authorization", `Bearer ${userLogin.body.token}`);
 
     expect(response.body).toHaveLength(1);
     expect(response.status).toBe(200);
@@ -195,11 +185,9 @@ describe("Create user route test", () => {
     const createdFinance = await request(app)
       .post(baseUrl)
       .send(mockedFinance)
-      .set("Authotization", `Bearer ${userLogin.body.token}`);
+      .set("Authorization", `Bearer ${userLogin.body.token}`);
 
-    const response = await request(app).delete(
-      `${baseUrl}/${createdFinance.body.id}`
-    );
+    const response = await request(app).delete(`${baseUrl}/${createdFinance.body.id}`);
 
     expect(response.body).toHaveProperty("message");
     expect(response.status).toBe(401);
