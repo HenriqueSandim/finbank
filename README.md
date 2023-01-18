@@ -40,7 +40,7 @@ https://finbank-api.onrender.com
 
 As rotas autenticadas (🔐) necessitam da adição de um token no cabeçalho da requisição do tipo "Bearer token". Caso não seja fornecido, será enviado um erro como:
 
-- Resposta (Proibido) - status: 401
+- ❌ Resposta (Proibido) - status: 401
 
 ```
 {
@@ -150,7 +150,7 @@ Dados de envio
   }
 ```
 
-- Resposta (sucesso) - status: 201
+- ✅ Resposta (sucesso) - status: 201
 
 ```
   {
@@ -169,7 +169,7 @@ Dados de envio
   }
 ```
 
-- Resposta (Conflito) - status 409 - no caso de o e-mail ou o CPF já existirem, exemplo:
+- ❌ Resposta (Conflito) - status 409 - no caso de o e-mail ou o CPF já existirem, exemplo:
 
 ```
   {
@@ -177,7 +177,7 @@ Dados de envio
   }
 ```
 
-- Resposta (Dados incorretos) - status 400 - no caso dos dados enviados não serem válidos, exemplo:
+- ❌ Resposta (Dados incorretos) - status 400 - no caso dos dados enviados não serem válidos, exemplo:
 
 ```
  {
@@ -201,7 +201,7 @@ Dados de envio
 
 - Porém é possível ativar a conta através dessa rota
 
-- Resposta (Sucesso) - status 200
+- ✅ Resposta (Sucesso) - status 200
 
 ```
 {
@@ -229,7 +229,7 @@ Dados de envio
   }
 ```
 
-- Resposta (sucesso) - status: 200
+- ✅ Resposta (sucesso) - status: 200
 
 ```
   {
@@ -248,7 +248,7 @@ Dados de envio
   }
 ```
 
-- Resposta (Dados incorretos) - status 400 - no caso dos dados enviados não serem válidos, exemplo:
+- ❌ Resposta (Dados incorretos) - status 400 - no caso dos dados enviados não serem válidos, exemplo:
 
 ```
 {
@@ -256,7 +256,7 @@ Dados de envio
 }
 ```
 
-- Resposta (Proibido) - status 403 - no caso de tentar editar um usuário que não seja você, ou você não seja admin, exemplo:
+- ❌ Resposta (Proibido) - status 403 - no caso de tentar editar um usuário que não seja você, ou você não seja admin, exemplo:
 
 ```
 {
@@ -266,9 +266,9 @@ Dados de envio
 
 #### 1.4. Deleção de usuários - ("/users/:id") - DELETE - autenticada 🔐
 
-- Resposta (Sucesso) - status 204 - no caso de sucesso nenhum corpo é retornado
+- ✅ Resposta (Sucesso) - status 204 - no caso de sucesso nenhum corpo é retornado
 
-- Resposta (Proibido) - status 403 - no caso de tentar deletar um usuário que não seja você, ou você não seja admin, exemplo:
+- ❌ Resposta (Proibido) - status 403 - no caso de tentar deletar um usuário que não seja você, ou você não seja admin, exemplo:
 
 ```
 {
@@ -278,7 +278,7 @@ Dados de envio
 
 #### 1.5. Mostrar usuário logado - ("/users") - GET - autenticada 🔐
 
-- Resposta (sucesso) - status: 201
+- ✅ Resposta (sucesso) - status: 201
 
 ```
   {
@@ -324,7 +324,7 @@ Dados de envio
   }
 ```
 
-- Resposta (sucesso) - status: 201
+- ✅ Resposta (sucesso) - status: 201
 
 ```
 {
@@ -332,7 +332,7 @@ Dados de envio
 }
 ```
 
-- Resposta (Proibido) - status: 403 - no caso de usuário e/ou senha incorretos
+- ❌ Resposta (Proibido) - status: 403 - no caso de usuário e/ou senha incorretos
 
 ```
 {
@@ -380,7 +380,7 @@ Obs: em "category" pode-se enviar tanto o id da categoria, quanto o nome.
   }
 ```
 
-- Resposta (sucesso) - status: 201
+- ✅ Resposta (sucesso) - status: 201
 
 ```
 {
@@ -409,7 +409,7 @@ Obs: em "category" pode-se enviar tanto o id da categoria, quanto o nome.
 }
 ```
 
-- Resposta (Não encontrado) - status: 404 - caso todas as categorias passadas não existam
+- ❌ Resposta (Não encontrado) - status: 404 - caso todas as categorias passadas não existam
 
 ```
 {
@@ -430,7 +430,7 @@ Obs: Pode-se enviar um campo ou todos os de criação.
   }
 ```
 
-- Resposta (sucesso) - status: 200
+- ✅ Resposta (sucesso) - status: 200
 
 ```
 {
@@ -452,7 +452,7 @@ Obs: Pode-se enviar um campo ou todos os de criação.
 }
 ```
 
-- Resposta (Não encontrado) - status: 404 - caso a finança não exista
+- ❌ Resposta (Não encontrado) - status: 404 - caso a finança não exista
 
 ```
 {
@@ -460,7 +460,7 @@ Obs: Pode-se enviar um campo ou todos os de criação.
 }
 ```
 
-- Resposta (Não encontrado) - status: 404 - caso as categorias passadas não existam
+- ❌ Resposta (Não encontrado) - status: 404 - caso as categorias passadas não existam
 
 ```
 {
@@ -468,7 +468,7 @@ Obs: Pode-se enviar um campo ou todos os de criação.
 }
 ```
 
-- Resposta (Proibido) - status: 403 - caso a finança que se deseje editar seja do tipo "transferência"
+- ❌ Resposta (Proibido) - status: 403 - caso a finança que se deseje editar seja do tipo "transferência"
 
 ```
 {
@@ -478,7 +478,7 @@ Obs: Pode-se enviar um campo ou todos os de criação.
 
 ### 3.3. Listar finanças do usuário logado - ("/finances") - GET - autenticada 🔐
 
-- Resposta (sucesso) - status: 200
+- ✅ Resposta (sucesso) - status: 200
 
 ```
 {
@@ -523,9 +523,9 @@ Obs: Pode-se enviar um campo ou todos os de criação.
 
 ### 3.4. Deletar uma finança - ("/finances/:finance_id") - DELETE - autenticada 🔐
 
-- Resposta (sucesso) - status: 204 - Sem retorno
+- ✅ Resposta (sucesso) - status: 204 - Sem retorno
 
-- Resposta (Não encontrado) - status: 404 - caso a finança não exista
+- ❌ Resposta (Não encontrado) - status: 404 - caso a finança não exista
 
 ```
 {
@@ -568,7 +568,7 @@ Dados de envio:
   }
 ```
 
-- Resposta (Sucesso) - status: 201
+- ✅ Resposta (Sucesso) - status: 201
 
 ```
 {
@@ -586,7 +586,7 @@ Dados de envio:
 }
 ```
 
-- Resposta (Proibido) - status: 401 - No caso de não haver dinheiro suficiente
+- ❌ Resposta (Proibido) - status: 401 - No caso de não haver dinheiro suficiente
 
 ```
 {
@@ -594,7 +594,7 @@ Dados de envio:
 }
 ```
 
-- Resposta (Não encontrado) - status: 404 - No caso da conta não ser encontrada
+- ❌ Resposta (Não encontrado) - status: 404 - No caso da conta não ser encontrada
 
 ```
 {
@@ -602,7 +602,7 @@ Dados de envio:
 }
 ```
 
-- Resposta (Dados não válidos) - status: 400 - No caso de serem enviados dados incorretos ou faltar dados
+- ❌ Resposta (Dados não válidos) - status: 400 - No caso de serem enviados dados incorretos ou faltar dados
 
 ```
 {
@@ -617,7 +617,7 @@ Dados de envio:
 
 ### 4.2. Listar transferências realizadas pelo usuário logado - ("/transfer") - GET - autenticada 🔐
 
-- Resposta (Sucesso) - status: 201
+- ✅ Resposta (Sucesso) - status: 201
 
 ```
 [
@@ -639,7 +639,7 @@ Dados de envio:
 
 ### 4.3. Gerar o pdf de uma transferência - ("/transfer/pdf/:id") - GET - autenticada 🔐
 
-- Resposta (Sucesso) - status: 200
+- ✅ Resposta (Sucesso) - status: 200
 
 ## ![transferencia](transferencia.png)
 
@@ -665,7 +665,7 @@ As categorias de finanças tem as seguintes informações dentro da DataBase:
 
 ### 5.1. Lista todas as categorias de finanças - ("/categories") - GET
 
-- Resposta (Sucesso) - status: 201
+- ✅ Resposta (Sucesso) - status: 201
 
 ```
 [
@@ -725,7 +725,7 @@ O saldo da conta tem as seguintes informações dentro da DataBase:
 
 ### 6.1. Retorna o saldo do usuário logado - ("/balance") - GET - autenticada 🔐
 
-- Resposta (Sucesso) - status: 200
+- ✅ Resposta (Sucesso) - status: 200
 
 ```
 {
