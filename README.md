@@ -106,7 +106,7 @@ Lembrando que é necessário configurar suas váriaveis de ambiente antes de rea
   - [Criar usuário](#11-criar-usuário-users---post)
   - [Ativar usuário](#12-ativação-de-novos-usuários-usersactiveid---get)
 
-- [Enviar email de ativação](#13-enviar-email-de-ativação-para-usuário-usersactive---post)
+  - [Enviar email de ativação](#13-enviar-email-de-ativação-para-usuário-usersactive---post)
 
   - [Editar usuário](#14-edição-de-usuários---usersid---patch---autenticada-🔐)
   - [Upload da foto do user](#15-upload-da-foto-do-user---usersimage---post---autenticada-🔐)
