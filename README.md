@@ -121,14 +121,14 @@ Usuários tem as seguintes informações dentro da DataBase:
 | deletedAt | date | Data indicando a deleção da conta. |
 | accountId | string | Identificador ligado a account do usuário. |
 
-### EndPoints
+### Rotas
 
-| Método | Rota            | Descrição                        |
-| ------ | --------------- | -------------------------------- |
-| POST   | /users          | Criação de um usuário.           |
-| PATCH  | /users/:user_id | Atualiza os dados de um usuário. |
-| DELETE | /users/:user_id | Deleta um usuário.               |
-| GET    | /users/:user_id | Pega as informações do usuário.  |
+| Método | Rota            | Descrição                               |
+| ------ | --------------- | --------------------------------------- |
+| POST   | /users          | Criação de um usuário.                  |
+| PATCH  | /users/:user_id | Atualiza os dados de um usuário.        |
+| DELETE | /users/:user_id | Deleta um usuário.                      |
+| GET    | /users/         | Lista as informações do usuário logado. |
 
 ### 1.1. Criação de usuários - ("/users") - POST
 
@@ -187,7 +187,7 @@ Dados de envio
  }
 ```
 
-##### Ativação de novos usuários ("users/active/:id") - GET
+#### 1.2. Ativação de novos usuários ("users/active/:id") - GET
 
 - Após a criação do usuário, será enviado um email para ativação da conta 📩
 
@@ -203,7 +203,15 @@ Dados de envio
 }
 ```
 
-##### Edição de usuários - ("/users/:id") - PATCH - autenticada 🔐
+#### 1.3. Edição de usuários - ("/users/:id") - PATCH - autenticada 🔐
+
+| Campo editável | Tipo   | Descrição                    |
+| -------------- | ------ | ---------------------------- |
+| name           | string | Atualiza o nome do usuário   |
+| email          | string | Atualiza o e-mail do usuário |
+| password       | string | Atualiza a senha do usuário  |
+
+Os outros campos não são editáveis.
 
 Dados de envio
 
@@ -215,7 +223,7 @@ Dados de envio
   }
 ```
 
-- Resposta (sucesso) - status: 201
+- Resposta (sucesso) - status: 200
 
 ```
   {
@@ -231,15 +239,6 @@ Dados de envio
 	"email": "mariajosesilva@gmail.com",
 	"name": "Maria José Silva",
 	"id": "deede2cb-6d14-4140-92a1-dcfbc560a04e"
-  }
-```
-
-- Resposta (Dados incorretos) - status 400 - no caso de nenhum campo editável ser enviado:
-
-```
-  {
-    "birthdate": "1980/05/15",
-    "cpf": "904.245.020-70"
   }
 ```
 
@@ -259,7 +258,15 @@ Dados de envio
 }
 ```
 
-##### Deleção de usuários - ("/users/:id") - DELETE - autenticada 🔐
+- Respota (Faltando token) - status 401 - Faltando token de autorização para a requisição
+
+```
+{
+  "message": "Missing headers authorization"
+}
+```
+
+#### 1.4. Deleção de usuários - ("/users/:id") - DELETE - autenticada 🔐
 
 - Resposta (Sucesso) - status 204 - no caso de sucesso nenhum corpo é retornado
 
@@ -271,7 +278,15 @@ Dados de envio
 }
 ```
 
-##### Mostrar usuário logado - ("/users") - GET - autenticada 🔐
+- Respota (Faltando token) - status 401 - Faltando token de autorização para a requisição
+
+```
+{
+  "message": "Missing headers authorization"
+}
+```
+
+#### 1.5. Mostrar usuário logado - ("/users") - GET - autenticada 🔐
 
 - Resposta (sucesso) - status: 201
 
@@ -292,7 +307,27 @@ Dados de envio
   }
 ```
 
+- Respota (Faltando token) - status 401 - Faltando token de autorização para a requisição
+
+```
+{
+  "message": "Missing headers authorization"
+}
+```
+
 ## 2. Login ("/login")
+
+Usuários tem as seguintes informações dentro da DataBase:
+| Campo | Tipo | Descrição |
+| -------------|---------|-------------------------------------------------|
+| email | string | O e-mail do usuário. |
+| password | string | A senha de acesso do usuário |
+
+### Rotas
+
+| Método | Rota   | Descrição            |
+| ------ | ------ | -------------------- |
+| POST   | /login | Login de um usuário. |
 
 ### 2.1. Login de usuários - ("/login") - POST
 
@@ -336,13 +371,14 @@ As Finanças tem as seguintes informações dentro da DataBase:
 | deletedAt | date | Data indicando a deleção da finança. |
 | accountId | string | Identificador ligado a account do usuário. |
 
-### EndPoints
+### Rotas
 
-| Método | Rota                  | Descrição                           |
-| ------ | --------------------- | ----------------------------------- |
-| POST   | /finances             | Criação de uma finança.             |
-| PATCH  | /finances/:finance_id | Atualiza os dados de uma finança.   |
-| GET    | /finances             | Pega as finanças do usuário logado. |
+| Método | Rota                  | Descrição                            |
+| ------ | --------------------- | ------------------------------------ |
+| POST   | /finances             | Criação de uma finança.              |
+| PATCH  | /finances/:finance_id | Atualiza os dados de uma finança.    |
+| GET    | /finances             | Lista as finanças do usuário logado. |
+| DELETE | /finances/:finance_id | Deleta uma finança                   |
 
 ### 3.1. Criação de uma finança - ("/finances") - POST - autenticada 🔐
 
@@ -502,3 +538,111 @@ Obs: Pode-se enviar um campo ou todos os de criação.
 	"message": "Finance not found"
 }
 ```
+
+## 4. Transferências
+
+As Transferências tem as seguintes informações dentro da DataBase:
+| Campo | Tipo | Descrição |
+| -------------|---------|-------------------------------------------------|
+| id | string | Identificador único do usuário |
+| description | string | Descrição da transferência. |
+| date | date | Data para efetuar a transferência (feature extra - não está no MVP) |
+| value | number | Valor da transferência |
+| createdAt | date | Data indicando quando a transferência foi criada. |
+| senderAccount | {id: number} | Identificador ligado a account do usuário que envia a transferência |
+| receiverAccount | {id: number} | Identificador ligado a account do usuário que recebe a transferência. |
+
+### Rotas
+
+| Método | Rota                          | Descrição                                                                 |
+| ------ | ----------------------------- | ------------------------------------------------------------------------- |
+| POST   | /transfer/:receiverAccount_id | Cria uma transferência de um usuário logado para uma conta passada por id |
+| GET    | /transfer                     | Lista as transferências do usuário logado.                                |
+| GET    | /transfer/pdf/:id             | Gera o pdf de uma transferência passada por id                            |
+
+### 4.1. Criar uma transferência - ("/transfer/:receiverAccount_id") - POST - autenticada 🔐
+
+Dados de envio:
+
+```
+  {
+	"description": "Churrasco",
+	"value": 50,
+	"date": "2023/01/18"
+  }
+```
+
+- Resposta (Sucesso) - status: 201
+
+```
+{
+	"senderAccount": {
+		"id": 2
+	},
+	"receiverAccount": {
+		"id": 1
+	},
+	"createdAt": "2023-01-17T23:44:33.637Z",
+	"value": 50,
+	"date": "2023-01-18T03:00:00.000Z",
+	"description": "Churrasco",
+	"id": "f760e6af-d448-4514-be81-2e9f1248421d"
+}
+```
+
+- Resposta (Proibido) - status: 401 - No caso de não haver dinheiro suficiente
+
+```
+{
+	"message": "insufficient money"
+}
+```
+
+- Resposta (Não encontrado) - status: 404 - No caso da conta não ser encontrada
+
+```
+{
+	"message": "account not found"
+}
+```
+
+- Resposta (Dados não válidos) - status: 400 - No caso de serem enviados dados incorretos ou faltar dados
+
+```
+{
+	"message": [
+		"description is a required field",
+		"value is a required field",
+		"Date format is invalid, format is yyyy/mm/dd",
+		"Date must be today or after"
+	]
+}
+```
+
+### 4.2. Listar transferências realizadas pelo usuário logado - ("/transfer") - GET - autenticada 🔐
+
+- Resposta (Sucesso) - status: 201
+
+```
+[
+	{
+		"senderAccount": {
+			"id": 2
+		},
+		"receiverAccount": {
+			"id": 1
+		},
+		"createdAt": "2023-01-17T23:44:33.637Z",
+		"value": 50,
+		"date": "2023-01-18T03:00:00.000Z",
+		"description": "Churrasco",
+		"id": "f760e6af-d448-4514-be81-2e9f1248421d"
+	}
+]
+```
+
+### 4.3. Gerar o pdf de uma transferência - ("/transfer/pdf/:id") - GET - autenticada 🔐
+
+- Resposta (Sucesso) - status: 200
+
+## ![transferencia](transferencia.png)
