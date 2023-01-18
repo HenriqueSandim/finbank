@@ -646,3 +646,7 @@ Dados de envio:
 - Resposta (Sucesso) - status: 200
 
 ## ![transferencia](transferencia.png)
+
+Também é enviado um e-mail com o pdf da transferência
+
+## ![email_transferencia](email_transferencia.png)
