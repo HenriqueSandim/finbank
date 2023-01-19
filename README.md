@@ -109,10 +109,9 @@ Lembrando que é necessário configurar suas váriaveis de ambiente antes de rea
   - [Enviar email de ativação](#13-enviar-email-de-ativação-para-usuário-usersactive---post)
 
   - [Editar usuário](#14-edição-de-usuários---usersid---patch---autenticada-🔐)
-  - [Upload da foto do user](#15-upload-da-foto-do-user---usersimage---post---autenticada-🔐)
-  - [Deletar usuário](#16-deleção-de-usuários---usersid---delete---autenticada-🔐)
-  - [Informações do usuário logado](#17-mostrar-usuário-logado---users---get---autenticada-🔐)
-  - [Upload de imagem do usuário](#18-upar-imagem-de-perfil---usersimage---post---autenticada-🔐)
+  - [Deletar usuário](#15-deleção-de-usuários---usersid---delete---autenticada-🔐)
+  - [Informações do usuário logado](#16-mostrar-usuário-logado---users---get---autenticada-🔐)
+  - [Upload de imagem do usuário](#17-upar-imagem-de-perfil---usersimage---post---autenticada-🔐)
 
 - [Login](#2-login-login)
   - [Login de usuários](#21-login-de-usuários---login---post)
@@ -152,12 +151,15 @@ Usuários tem as seguintes informações dentro da DataBase:
 
 ### Rotas
 
-| Método | Rota            | Descrição                               |
-| ------ | --------------- | --------------------------------------- |
-| POST   | /users          | Criação de um usuário.                  |
-| PATCH  | /users/:user_id | Atualiza os dados de um usuário.        |
-| DELETE | /users/:user_id | Deleta um usuário.                      |
-| GET    | /users/         | Lista as informações do usuário logado. |
+| Método 	| Rota            			| Descrição                               		|
+|-----------| --------------------------| ----------------------------------------------|
+| POST   	| /users          			| Criação de um usuário.                  		|
+| GET   	| /users/active/:user_id	| Ativa o user.                  				|
+| POST   	| /users/active          	| Envia e-mail de ativação para o user.   		|
+| PATCH  	| /users/:user_id 			| Atualiza os dados de um usuário.        		|
+| DELETE 	| /users/:user_id 			| Deleta um usuário.                      		|
+| GET    	| /users/         			| Lista as informações do usuário logado. 		|
+| POST   	| /users/image          	| Upload de uma imagem de perfil para o user.	|
 
 ### 1.1. Criar usuário ("/users") - POST
 
@@ -337,7 +339,7 @@ Dados de envio
 }
 ```
 
-### 1.6. Deleção de usuários - ("/users/:id") - DELETE - autenticada 🔐
+### 1.5. Deleção de usuários - ("/users/:id") - DELETE - autenticada 🔐
 
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
@@ -351,7 +353,7 @@ Voltar aos [EndPoints - 🔙](#3-endpoints)
 }
 ```
 
-### 1.7. Mostrar usuário logado - ("/users") - GET - autenticada 🔐
+### 1.6. Mostrar usuário logado - ("/users") - GET - autenticada 🔐
 
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
@@ -374,7 +376,7 @@ Voltar aos [EndPoints - 🔙](#3-endpoints)
   }
 ```
 
-### 1.8. Upar imagem de perfil - ("/users/image") - POST - autenticada 🔐
+### 1.7. Upar imagem de perfil - ("/users/image") - POST - autenticada 🔐
 
 Voltar aos [EndPoints - 🔙](#3-endpoints)
 
@@ -387,7 +389,7 @@ Dados:
 }
 ```
 
-## ![DER](/src/assets/update-image-example.png)
+#### ![DER](/src/assets/update-image-example.png)
 
 - Resposta (Sucesso) - status 200
 ```
